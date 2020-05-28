@@ -8,7 +8,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 In the project directory, you can run:
 
 ### `npm install`
@@ -32,7 +32,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Backend
 
-## Available Scripts
+### Available Scripts
 In the project directory, you can run: <br />
 
 ### `npm install`
