@@ -9,20 +9,19 @@ jobs:
       - checkout
       - run: ls
       - run: cd backend
-      - node/with-cache:
+      - node:
           steps:
-            - run: npm install
-            - run: npm start
+            - run: cd backend && npm install
+            - run: cd backend && npm start
   test:
     executor:
       name: node/default
     steps:
       - checkout
       - run: cd backend
-      - node/with-cache:
+      - node:
           steps:
-            - run: cd backend
-            - run: npm test
+            - run: cd backend && npm test
 
 workflows:
     pr_check:
