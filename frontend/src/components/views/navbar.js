@@ -10,7 +10,6 @@ class Navbar extends Component {
     }
 
     render(){
-        console.log('in navbar token: '+localStorage.getItem('authToken'))
         const loginRegLink = (
             <ul className="navbar-nav">
                 <ul className="navbar-nav">
@@ -25,11 +24,6 @@ class Navbar extends Component {
                         Login
                     </Link>
                 </li>
-                {/* <li className="nav-item">
-                    <Link to="/register" className="nav-link">
-                        Register
-                    </Link>
-                </li> */}
             </ul>
         )
 

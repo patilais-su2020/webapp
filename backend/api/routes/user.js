@@ -69,7 +69,7 @@ router.post('/login', (req, res, next) => {
       console.log(err);
       res.status(404).json({
         message: "User not found",
-        error: err.original.sqlMessage
+        error: err
       })
     });
 });
