@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run: ls
       - run: cd backend
-      - node:
+      - node/with-cache:
           steps:
             - run: cd backend && npm install
             - run: cd backend && npm start
@@ -19,7 +19,7 @@ jobs:
     steps:
       - checkout
       - run: cd backend
-      - node:
+      - node/with-cache:
           steps:
             - run: cd backend && npm test
 
