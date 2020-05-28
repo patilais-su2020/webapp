@@ -4,20 +4,20 @@ request = require('supertest')
 should = require('should')
 var expect = chai.expect;
 
-describe('POST /user/register', function() {
-    it('responds with json', function(done) {
+describe('POST /user/register', function () {
+  it('responds with json error', function (done) {
     request(app)
       .post('/user/register')
-      .send({firstName: "Aishwarya", lastName: null, email: 'user@email.com', password: 'yourpassword'})
+      .send({ firstName: "Aishwarya", lastName: null, email: null, password: 'yourpassword' })
       .set('Accept', 'application/json')
       .expect('Content-Type', 'application/json; charset=utf-8')
-      .expect(500)
-      .end(function(err, res) {
+      .expect(400)
+      .end(function (err, res) {
         console.log(res.text)
-        if(res.text.should.equal('{"error":"Column \'lastName\' cannot be null"}')) {
-            expect(res.statusCode).to.equal(500);
-            done();
+        if (res.text.should.equal('{"status":400,"message":"Email can not be empty!"}')) {
+          expect(res.statusCode).to.equal(400);
+          done();
         }
       })
-    });
-  });   
+  });
+});
