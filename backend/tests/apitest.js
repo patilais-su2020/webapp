@@ -9,9 +9,13 @@ describe('MySQL connection check: ', () => {
     request(app)
       .post('/user/register')
       .end((err, res) => {
+        console.log("res")
+        console.log(res)
+        console.log("err")
+        console.log(err)
         if (err) {
           console.error("ERROR:", err);
-          err.should.have.property("errno")
+          err.should.have("errno")
         } else {
           console.log("Connected to database successfully")
           describe('/POST /user/register', () => {
