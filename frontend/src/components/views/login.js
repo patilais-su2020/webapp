@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {login} from '../apis/api'
+import '../views/style/login.css'
 
 class Login extends Component {
     constructor(){
@@ -53,7 +54,7 @@ class Login extends Component {
                         <div className="card card-login my-5">
                         <div className="card-body">
                             <h5 className="card-title text-center">Log In</h5>
-                            <form className="form" onSubmit={this.onSubmit}>
+                            <form className="form-login" onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <label htmlFor="email">Email address</label>
                                 <input type="email" className="form-control" name="email" placeholder="Enter email" required value={this.state.email} onChange={this.onChange} />

@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import jwt_decode from 'jwt-decode'
 
 class Home extends Component {
 
-    constructor(){
+    constructor() {
         super()
         this.state = {
             email: '',
@@ -11,7 +11,7 @@ class Home extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const authToken = localStorage.authToken
         const decode = jwt_decode(authToken)
         this.setState({
@@ -21,13 +21,19 @@ class Home extends Component {
     }
 
     render() {
-        return(
+        return (
             <div className="container">
                 <div className="container header mt-5">
-                    <div className="col-sm-8 mx-auto">
-                        <h2 className="text-center">
-                            Hi {this.state.firstName}!  Welcome to the course CSYEE-6225
-                        </h2>
+                    <div className="col-sm-12 mx-auto">
+                        <div className="card card-login my-5">
+                            <div className="card-body">
+                                <h2 className="card-title text-center">Network Security and Cloud Computing</h2>
+                                <h3 className="text-center">
+                                    Hi {this.state.firstName}!
+                                    <p>Welcome to the course CSYEE-6225</p>
+                                </h3>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

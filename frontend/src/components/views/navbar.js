@@ -52,7 +52,7 @@ class Navbar extends Component {
                     <span className="navbar-toggle-icon"></span>
                 </button>
 
-                <div className="collapse navbar-collapse justify-content-md-right" id="navbar1">
+                <div className="collapse navbar-collapse justify-content-md-end" id="navbar1">
                     {localStorage.authToken ? userLink :loginRegLink }
                 </div>
             </nav>

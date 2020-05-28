@@ -7,6 +7,13 @@ const User = require("../models/user");
 
 //Register
 router.post("/register", (req, res, next) => {
+  if (!req.body.email) {
+    res.status(400).json({
+        status: 400,
+        message: "Email can not be empty!"
+    });
+    return;
+  }
   User.findAll({
     where: { email: req.body.email }
   })

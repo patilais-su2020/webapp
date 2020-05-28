@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import jwt_decode from 'jwt-decode'
 import {updateProfile} from '../apis/api'
+import '../views/style/profile.css'
 
 class Profile extends Component {
     constructor() {
@@ -65,11 +66,11 @@ class Profile extends Component {
             <div className="container">
             <div className="row">
               <div className="col-sm-10 col-md-9 col-lg-10 mx-auto"> 
-                <div className="card card-login my-2">
+                <div className="card card-profile my-2">
                   <div className="card-body">
                       <div className="col-sm-10 mx-auto">
-                        <form noValidate onSubmit={this.onSubmit}>
-                          <h1 className="text-center mb-5">Profile Information</h1>
+                        <form className="form-profile" noValidate onSubmit={this.onSubmit}>
+                          <h2 className="text-center mb-5">Profile Information</h2>
                         
                           <div className="form-group row">
                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>First name:</h5></label>

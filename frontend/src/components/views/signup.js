@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {register} from '../apis/api'
 import {Link} from 'react-router-dom'
-import './signup.css'
+import '../views/style/signup.css'
 // import { ToastMessage } from "react-toastr";
 
 class SignUp extends Component {
@@ -67,7 +67,7 @@ class SignUp extends Component {
                     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto"> 
                         <div className="card card-signin my-5">
                         <div className="card-body">
-                            <h5 className="card-title text-center">Sign In</h5>
+                            <h5 className="card-title text-center"><b>Sign In</b></h5>
                             <form className="form-signin" onSubmit={this.onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="firstName">First name</label>
