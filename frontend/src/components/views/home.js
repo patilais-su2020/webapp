@@ -4,7 +4,6 @@ import jwt_decode from 'jwt-decode'
 class Home extends Component {
 
     constructor(){
-        console.log("inconstructor")
         super()
         this.state = {
             email: '',

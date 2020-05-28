@@ -12,7 +12,6 @@ class Profile extends Component {
             password: ''
         }
 
-        // this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
 
@@ -29,28 +28,36 @@ class Profile extends Component {
 
     changeFirstName = (event) => {
       this.setState({ firstName: event.target.value });
-      console.log(event.target.value)
     }
 
     changeLastName = (event) => {
       this.setState({ lastName: event.target.value });
     }
 
+    changePassword = (event) => {
+      this.setState({ password: event.target.value });
+    }
+
     onSubmit(e){
         e.preventDefault()
-        
+
         const user = {
             email: this.state.email,
             password: this.state.password,
             firstName: this.state.firstName,
             lastName: this.state.lastName
         }
-
-        console.log(user.firstName)
-        updateProfile(user).then(res => {
-            // this.props.history.push('/profile')
-            this.props.history.push('/profile')
-        })
+      
+        const regexPassword = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})")
+        const validatePassword = regexPassword.test(user.password)
+        
+        if(validatePassword || user.password==='') {
+          updateProfile(user).then(res => {
+              this.props.history.push('/profile')
+          })
+        } else {
+          alert('Password must be contain minimum 8 characters, 1 uppercase, 1 lowercase and 1 special character')
+        }
     }
 
     render(){
@@ -66,15 +73,14 @@ class Profile extends Component {
                         
                           <div className="form-group row">
                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>First name:</h5></label>
-                           {/* <input type="text" className="col-sm-5 col-md-4 col-lg-5 form-control" name="email" placeholder="Enter email" value={this.state.firstName} onChange={this.onChange} /> */}
-                            <input type="text" className=" col-sm-5 col-md-4 col-lg-5" defaultValue={this.state.firstName} onChange={this.changeFirstName} />
+                            <input type="text" className=" col-sm-5 col-md-4 col-lg-5" required defaultValue={this.state.firstName} onChange={this.changeFirstName} />
                           
                           </div>
 
                           <div className="form-group row">
                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Last name:</h5></label>
                           
-                            <input id="last_name" type="text" className=" col-sm-5 col-md-4 col-lg-5 form-control"  value={this.state.lastName} onChange={this.changeLastName}/>
+                            <input id="last_name" type="text" className=" col-sm-5 col-md-4 col-lg-5 form-control" required value={this.state.lastName} onChange={this.changeLastName}/>
                           
                           </div>
 
@@ -87,9 +93,7 @@ class Profile extends Component {
 
                           <div className="form-group row">
                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Change Password:</h5></label>
-                          
-                            <input className=" col-sm-5 col-md-4 col-lg-5 form-control" type="password"/>
-                          
+                            <input className=" col-sm-5 col-md-4 col-lg-5 form-control" type="password" onChange={this.changePassword}/>
                           </div>
               
                         <button type="submit" className="btn btn-mm btn-primary btn float-right ml-2"> Save </button>

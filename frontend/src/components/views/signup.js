@@ -41,9 +41,10 @@ class SignUp extends Component {
         if(validateEmail){
             if(validatePassword){
                 register(user).then(res => {
-                    if(res.status==200){
-                        this.props.history.push('\login')
-                    } else if(res.status==409){
+                    if(res.status===200){
+                        console.log("Successfully Registered")
+                        this.props.history.push('/login')
+                    } else if(res.status===409){
                         alert('User Exists')
                     } else {
                         alert('There was an error while creating account')

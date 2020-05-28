@@ -31,11 +31,11 @@ class Login extends Component {
 
         if(validateEmail){
                 login(user).then(res => {
-                    if(res.status==200){
+                    if(res.status===200){
                         this.props.history.push('/home')
-                    } else if(res.status==401){
+                    } else if(res.status===401){
                         alert('Invalid credentials')
-                    } else if(res.status==404){
+                    } else if(res.status===404){
                         alert('User not found! Please register with a new account')
                     }
                 })

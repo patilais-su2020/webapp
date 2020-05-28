@@ -31,6 +31,7 @@ router.post("/register", (req, res, next) => {
                   status: 200,
                   message: user.email + ' account created!'
                 })
+                console.log("Registered")
               })
               .catch(err => {
                 res.status(500).json({
@@ -79,7 +80,6 @@ router.post('/login', (req, res, next) => {
 router.get('/profile', (req, res, next) => {
   // verify a token symmetric - synchronous
   var decoded = jwt.verify(req.headers['authorization'], 'secret');
-  console.log(decoded.email)
 
   User.findOne({
     where: {
@@ -108,8 +108,6 @@ router.get('/profile', (req, res, next) => {
 router.put('/profile/update', (req, res, next) => {
   // verify a token symmetric - synchronous
   var decoded = jwt.verify(req.headers['authorization'], 'secret');
-  console.log(decoded.email)
-  console.log(decoded.password)
 
   User.findOne({
     where: {
@@ -117,11 +115,30 @@ router.put('/profile/update', (req, res, next) => {
     }
   })
     .then(user => {
-      const data = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        password: req.body.password
-      }
+      if(req.body.password === '' || req.body.password == ' '){
+        const data = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+        }
+        User.update(data, {where: { email: decoded.email } })
+        .then(user => {
+          res.json({
+            message: decoded.email + ' details updated!',
+            status: 200
+          })
+        })
+        .catch(err => {
+          res.status(500).json({
+            error: err
+          })
+        })
+    
+      } else {
+        const data = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          password: req.body.password
+        }
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(data.password, salt, (err, hash) => {
             data.password = hash
@@ -134,12 +151,12 @@ router.put('/profile/update', (req, res, next) => {
               })
               .catch(err => {
                 res.status(500).json({
-                  error: err.original.sqlMessage
+                  error: err
                 })
               })
           });
         });
-      
+      }
     })
     .catch(err => {
       console.log(err);
