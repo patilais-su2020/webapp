@@ -33,7 +33,10 @@ router.post("/register", (req, res, next) => {
                 })
               })
               .catch(err => {
-                res.send('error: ' + err)
+                res.status(500).json({
+                  error: err.original.sqlMessage
+                })
+                
               })
           });
         });
@@ -66,7 +69,7 @@ router.post('/login', (req, res, next) => {
       console.log(err);
       res.status(404).json({
         message: "User not found",
-        error: err
+        error: err.original.sqlMessage
       })
     });
 });
@@ -85,7 +88,7 @@ router.get('/profile', (req, res, next) => {
   })
     .then(user => {
       if (user) {
-        res.json(user, {status: 200})
+        res.status(200).json(user, {status: 200})
       } else {
         res.status(500).json({
           message: "User not found"
@@ -122,7 +125,7 @@ router.put('/profile/update', (req, res, next) => {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(data.password, salt, (err, hash) => {
             data.password = hash
-                   User.update(data, {where: { email: decoded.email } })
+            User.update(data, {where: { email: decoded.email } })
               .then(user => {
                 res.json({
                   message: decoded.email + ' details updated!',
@@ -130,7 +133,9 @@ router.put('/profile/update', (req, res, next) => {
                 })
               })
               .catch(err => {
-                res.send('error: ' + err)
+                res.status(500).json({
+                  error: err.original.sqlMessage
+                })
               })
           });
         });
