@@ -1,4 +1,4 @@
-# Webapp
+# Webapp Application
 
 ## TECHNOLOGY STACK
 * Backend: NodeJS, ExpressJs, MySQL
