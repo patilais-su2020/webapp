@@ -19,14 +19,7 @@ module.exports = db.sequelize.define(
             type: Sequelize.STRING
         },
         password: {
-            type: Sequelize.STRING,
-            // validate: {
-            //     notEmpty: true,
-            //     len: {
-            //         args: [8, 16],
-            //         msg: "Email address must be between 6 and 128 characters in length"
-            //     },
-            // }
+            type: Sequelize.STRING
         }
     },
     {
