@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
 const User = require("../models/user");
+const { Op } = require("sequelize");
 
 const Books = require("../models/books");
 
@@ -28,37 +28,60 @@ router.post('/upload', (req, res, next) => {
                 updatedOn: today,
                 user_id: user.id
             }
-
-            Books.create(books)
+            Books.findAll({
+                where: {
+                  user_id: user.id,
+                  isbn: books.isbn
+                }
+              })
                 .then(book => {
-                    res.status(200).json({
-                        status: 200,
-                        message: book.title + 'uploaded for sale!'
-                    })
-                    console.log("Uploaded book")
-                })
-                .catch(error => {
-                    console.log(error)
-                    if (JSON.stringify(error).includes("Validation error")) {
-                        res.status(400).json({
-                            status: 400,
-                            message: "Validation error"
+                    console.log(book)
+                    if(Array.isArray(book) && book.length == 0) {
+                        Books.create(books)
+                        .then(book => {
+                            res.status(200).json({
+                                status: 200,
+                                message: book.title + 'uploaded for sale!'
+                            })
+                            console.log("Uploaded book")
                         })
-                    } else if (JSON.stringify(error).includes("ER_DUP_ENTRY")) {
-
-                        res.status(409).json({
-                            status: 409,
-                            message: "Duplicate entry"
+                        .catch(error => {
+                            console.log(error)
+                            if (JSON.stringify(error).includes("Validation error")) {
+                                res.status(400).json({
+                                    status: 400,
+                                    message: "Validation error"
+                                })
+                            } else if (JSON.stringify(error).includes("ER_DUP_ENTRY")) {
+        
+                                res.status(409).json({
+                                    status: 409,
+                                    message: "Duplicate entry"
+                                })
+                            } else {
+                                res.status(500).json({
+                                    status: 500,
+                                    message: "Error uploading book"
+                                })
+                            }
                         })
                     } else {
-                        res.status(500).json({
-                            status: 500,
-                            message: "Error uploading book"
+                        res.status(409).json({
+                            status: 409,
+                            message: "Duplicate Entry",
                         })
                     }
                 })
+                .catch(err => {
+                  console.log(err);
+                  res.status(400).json({
+                    message: "Bad Request",
+                    error: err
+                  })
+                })
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({
                 status: 500,
                 message: "User not found"
@@ -84,7 +107,7 @@ router.get('/booksposted', (req, res, next) => {
             })
                 .then(books => {
                     res.status(200).json(books)
-                    console.log("Uploaded book")
+                    console.log("Fetched all books")
                 })
                 .catch(error => {
                     res.status(500).json({
@@ -116,6 +139,7 @@ router.put('/update/:isbn', (req, res, next) => {
     })
         .then(user => {
             const today = new Date()
+            console.log(today);
             const books = {
                 isbn: req.body.isbn,
                 title: req.body.title,
@@ -166,8 +190,15 @@ router.put('/update/:isbn', (req, res, next) => {
 
 
 //delete uploaded books
-router.delete('/:isbn', (req, res, next) => {
-    var decoded = jwt.verify(req.headers['authorization'], 'secret');
+router.delete('/deletebook', (req, res, next) => {
+    console.log("Inside delete api")
+    // console.log(req.headers);
+    let decoded = jwt.verify(req.headers['authorization'], 'secret');
+    console.log('Decoded Jwt: '+ decoded)
+    console.log("Request body " + JSON.stringify(req.body))
+
+    console.log('Inside delete backend')
+
     User.findOne({
         where: {
             email: decoded.email
@@ -175,12 +206,26 @@ router.delete('/:isbn', (req, res, next) => {
     })
     .then(user => {
         Books.findOne({
-            where: {isbn:req.params.isbn}
+            where: {
+                [Op.and]: [
+                        {
+                            isbn: req.body.isbn,
+                            user_id: user.id
+                        }
+                    ] 
+                }
         }).then(book =>{
             if(book != null){
-
-            console.log("Found: "+ book)
-        Books.destroy({where: { isbn: req.params.isbn }})
+            Books.destroy(
+                {where: {
+                    [Op.and]: [
+                            {
+                                isbn: req.body.isbn,
+                                user_id: user.id
+                            }
+                        ] 
+                    }
+                })
             .then(book => {
                 res.status(200).json({
                     status: 200,
@@ -206,6 +251,7 @@ router.delete('/:isbn', (req, res, next) => {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({
                 status: 500,
                 message: "Error finding book"
@@ -222,6 +268,45 @@ router.delete('/:isbn', (req, res, next) => {
 })
 
 
+//Get all books
+router.get('/allbooks', (req, res, next) => {
+
+    var decoded = jwt.verify(req.headers['authorization'], 'secret');
+    console.log('Inside getallbooks')
+
+    User.findOne({
+        where: {
+            email: decoded.email
+        }
+    })
+        .then(user => {
+            Books.findAll({
+                where: {
+                    user_id: {
+                        [Op.not]: user.id}
+                }
+            }).then(books => {
+                    res.status(200).json(books)
+                    console.log("Fetched all books")
+                })
+                .catch(error => {
+                    console.log(error)
+                    res.status(500).json({
+                        status: 500,
+                        message: "Unable to fetch books"
+                    })
+                    console.log(error)
+
+                })
+        })
+        .catch(err => {
+            console.log(error)
+            res.status(400).json({
+                status: 400,
+                message: "User not found"
+            })
+        })
+})
 
 
 module.exports = router;

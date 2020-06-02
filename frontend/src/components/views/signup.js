@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {register} from '../apis/api'
+import {register} from '../apis/userapi'
 import {Link} from 'react-router-dom'
 import '../views/style/signup.css'
 // import { ToastMessage } from "react-toastr";

@@ -1,32 +1,60 @@
 import React, { useState, useEffect } from 'react'
 import jwt_decode from 'jwt-decode'
-import { getallbooks } from '../apis/booksapi'
+import { postedbooks } from '../apis/booksapi'
+import { deletebook } from '../apis/booksapi'
 import {Link} from 'react-router-dom'
 import './style/home.css'
+import { useHistory} from 'react-router';
 
-function Home() {
+function Uploaded(props) {
 
     const [Books, setBooks] = useState([])
-
+    const history = useHistory();
     const authToken = localStorage.authToken
     const decode = jwt_decode(authToken)
 
     useEffect(() => {
-        getallbooks().then(res => {
+        postedbooks().then(res => {
             if(res.status===200){
                 setBooks(res.data)
                 console.log(res.data)
             } else if(res.status===400){
                 alert('Unable to fetch details')
-            } else if(res.status===500){
+            } else if(res.status==500){
                 alert('User not found')
             }
         })
     }, [])
 
+    function deleteClicked() {
+        console.log('Inside delete Clicked')
+        window.$("#mi-modal").modal('show');
+    } 
+
+    function deleteEntryConfirm(book) {
+        console.log('Inside delete Entry')
+        console.log(book)
+        deletebook(book).then(res => {
+            if(res.status===200){
+                window.$("#mi-modal").modal('hide');
+                alert('successfully deleted')
+                history.go();
+            } else if(res.status===400) {
+                alert('Unable to fetch details')
+            } else if(res.status==500) {
+                alert('User not found')
+            }
+        })
+        // window.$("#mi-modal").modal('hide');
+    } 
+
+    function deleteEntryDenied(){
+        window.$("#mi-modal").modal('hide');
+    }
+
     const renderCards = Books.map((book, index)=>{
         return (
-        <div className="col-lg-6 col-md-8 col-sm-24">
+            <div className="col-lg-6 col-md-8 col-sm-24">
             <div className="card  displaybooks">
             <div className="card-header">
                 <h4 className="card-title  text-center" style={{fontWeight: "bold"}}>{book.title}</h4>
@@ -39,8 +67,26 @@ function Home() {
                     <hr />
                 </div>
                 <div className="card-footer text-center">
-                <button className="btn btn-lg input-block-level btn-primary btn"> Add to Cart</button>
-            </div>
+                    <button className="btn btn-sm btn-primary btn mr-5"> Update</button>
+                    <button className="btn btn-sm btn-primary btn ml-5" id="delete-btn" onClick={deleteClicked}> Delete</button>
+                    {/* ======================================================================== */}
+                    <div className="modal fade" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+                    <div className="modal-dialog modal-sm">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                        <h4 className="modal-title" id="myModalLabel">Do you want to delete this book?</h4>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-default" id="modal-btn-yes" onClick={() => deleteEntryConfirm(book)}>Yes</button>
+                            <button type="button" className="btn btn-primary" id="modal-btn-no" onClick={() => deleteEntryDenied()}>No</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                    {/* ======================================================================== */}
+                    <div className="alert" role="alert" id="result"></div>
+                </div>
             </div>
         </div>
         )
@@ -50,7 +96,7 @@ function Home() {
     return(
         <div className="container">
                 <div className="container header mt-5">
-                    <div className="col-lg-11-5 mx-auto" >
+                    <div className="col-sm-12 mx-auto">
                         <div className="card card-login my-5" style={{ backgroundColor: "rgba(197, 197, 197, 0.3)"}}>
                             <div className="card-body">
                                 <h2 className="card-title text-center">Hi! {decode.firstName}</h2>
@@ -85,4 +131,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Uploaded
