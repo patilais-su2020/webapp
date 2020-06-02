@@ -26,45 +26,46 @@ router.post('/upload', (req, res, next) => {
                 price: req.body.price,
                 createdOn: today,
                 updatedOn: today,
-                user_id: user.id
+                user_id: user.id,
+                deleted: false
             }
             Books.findAll({
                 where: {
-                  user_id: user.id,
-                  isbn: books.isbn
+                    user_id: user.id,
+                    isbn: books.isbn,
+                    deleted: false
                 }
-              })
+            })
                 .then(book => {
-                    console.log(book)
-                    if(Array.isArray(book) && book.length == 0) {
+                    if (Array.isArray(book) && book.length == 0) {
                         Books.create(books)
-                        .then(book => {
-                            res.status(200).json({
-                                status: 200,
-                                message: book.title + 'uploaded for sale!'
+                            .then(book => {
+                                res.status(200).json({
+                                    status: 200,
+                                    message: book.title + 'uploaded for sale!'
+                                })
+                                console.log("Uploaded book")
                             })
-                            console.log("Uploaded book")
-                        })
-                        .catch(error => {
-                            console.log(error)
-                            if (JSON.stringify(error).includes("Validation error")) {
-                                res.status(400).json({
-                                    status: 400,
-                                    message: "Validation error"
-                                })
-                            } else if (JSON.stringify(error).includes("ER_DUP_ENTRY")) {
-        
-                                res.status(409).json({
-                                    status: 409,
-                                    message: "Duplicate entry"
-                                })
-                            } else {
-                                res.status(500).json({
-                                    status: 500,
-                                    message: "Error uploading book"
-                                })
-                            }
-                        })
+                            .catch(error => {
+                                console.log(error)
+                                if (JSON.stringify(error).includes("Validation error")) {
+                                    res.status(400).json({
+                                        status: 400,
+                                        message: "Validation error"
+                                    })
+                                } else if (JSON.stringify(error).includes("ER_DUP_ENTRY")) {
+
+                                    res.status(409).json({
+                                        status: 409,
+                                        message: "Duplicate entry"
+                                    })
+                                } else {
+                                    res.status(500).json({
+                                        status: 500,
+                                        message: "Error uploading book"
+                                    })
+                                }
+                            })
                     } else {
                         res.status(409).json({
                             status: 409,
@@ -73,11 +74,11 @@ router.post('/upload', (req, res, next) => {
                     }
                 })
                 .catch(err => {
-                  console.log(err);
-                  res.status(400).json({
-                    message: "Bad Request",
-                    error: err
-                  })
+                    console.log(err);
+                    res.status(400).json({
+                        message: "Bad Request",
+                        error: err
+                    })
                 })
         })
         .catch(err => {
@@ -102,7 +103,8 @@ router.get('/booksposted', (req, res, next) => {
         .then(user => {
             Books.findAll({
                 where: {
-                    user_id: user.id
+                    user_id: user.id,
+                    deleted: false
                 }
             })
                 .then(books => {
@@ -130,8 +132,10 @@ router.get('/booksposted', (req, res, next) => {
 
 
 //Update Book details
-router.put('/update/:isbn', (req, res, next) => {
+router.put('/update', (req, res, next) => {
+    console.log(req)
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
+    console.log(decoded);
     User.findOne({
         where: {
             email: decoded.email
@@ -151,7 +155,17 @@ router.put('/update/:isbn', (req, res, next) => {
                 user_id: user.id
             }
 
-            Books.update(books, {where: { isbn: req.params.isbn } })
+            Books.update(books, {
+                where: {
+                    [Op.and]: [
+                        {
+                            isbn: req.body.oldisbn,
+                            user_id: user.id,
+                            deleted: false
+                        }
+                    ]
+                }
+            })
                 .then(book => {
                     res.status(200).json({
                         status: 200,
@@ -160,7 +174,6 @@ router.put('/update/:isbn', (req, res, next) => {
                     console.log("Updated book!!")
                 })
                 .catch(error => {
-                    console.log(error)
                     if (JSON.stringify(error).includes("Validation error")) {
                         res.status(400).json({
                             status: 400,
@@ -190,83 +203,66 @@ router.put('/update/:isbn', (req, res, next) => {
 
 
 //delete uploaded books
-router.delete('/deletebook', (req, res, next) => {
-    console.log("Inside delete api")
-    // console.log(req.headers);
-    let decoded = jwt.verify(req.headers['authorization'], 'secret');
-    console.log('Decoded Jwt: '+ decoded)
-    console.log("Request body " + JSON.stringify(req.body))
-
-    console.log('Inside delete backend')
-
+router.put('/deletebook', (req, res, next) => {
+    console.log(req)
+    var decoded = jwt.verify(req.headers['authorization'], 'secret');
+    console.log(decoded);
     User.findOne({
         where: {
             email: decoded.email
         }
     })
-    .then(user => {
-        Books.findOne({
-            where: {
-                [Op.and]: [
+        .then(user => {
+            const today = new Date()
+            console.log(today);
+            const books = {
+                deleted: req.body.deleted
+            }
+
+            Books.update(books, {
+                where: {
+                    [Op.and]: [
                         {
                             isbn: req.body.isbn,
                             user_id: user.id
                         }
-                    ] 
+                    ]
                 }
-        }).then(book =>{
-            if(book != null){
-            Books.destroy(
-                {where: {
-                    [Op.and]: [
-                            {
-                                isbn: req.body.isbn,
-                                user_id: user.id
-                            }
-                        ] 
+            })
+                .then(book => {
+                    res.status(200).json({
+                        status: 200,
+                        message: 'Book Detail Updated for sale!'
+                    })
+                    console.log("Updated book!!")
+                })
+                .catch(error => {
+                    if (JSON.stringify(error).includes("Validation error")) {
+                        res.status(400).json({
+                            status: 400,
+                            message: "Validation error"
+                        })
+                    } else if (JSON.stringify(error).includes("ER_DUP_ENTRY")) {
+
+                        res.status(409).json({
+                            status: 409,
+                            message: "Duplicate entry"
+                        })
+                    } else {
+                        res.status(500).json({
+                            status: 500,
+                            message: "Error uploading book"
+                        })
                     }
                 })
-            .then(book => {
-                res.status(200).json({
-                    status: 200,
-                    message: 'Book Deleted!'
-                })
-                console.log("Book deleted!!")
-            })
-            .catch(error => {
-                console.log(error)
-                // if (JSON.stringify(error).includes("Validation error")) {
-                    res.status(500).json({
-                        status: 500,
-                        message: "Error while deleting book"
-                    })
-                // }
-            })
-            }
-            else{
-                res.status(404).json({
-                    status: 404,
-                    message: "Book not found"
-                })
-            }
         })
         .catch(err => {
-            console.log(err)
             res.status(500).json({
                 status: 500,
-                message: "Error finding book"
+                message: "User not found"
             })
         })
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(500).json({
-            status: 500,
-            message: "User not found"
-        })
-    })
 })
-
 
 //Get all books
 router.get('/allbooks', (req, res, next) => {
@@ -283,12 +279,14 @@ router.get('/allbooks', (req, res, next) => {
             Books.findAll({
                 where: {
                     user_id: {
-                        [Op.not]: user.id}
+                        [Op.not]: user.id
+                    },
+                    deleted: false
                 }
             }).then(books => {
-                    res.status(200).json(books)
-                    console.log("Fetched all books")
-                })
+                res.status(200).json(books)
+                console.log("Fetched all books")
+            })
                 .catch(error => {
                     console.log(error)
                     res.status(500).json({

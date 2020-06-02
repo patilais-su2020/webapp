@@ -4,15 +4,16 @@ export const bookupload = uploadBook => {
     return axios
     .post('books/upload', 
     {
-        header: {'Authorization': localStorage.getItem('authToken')}
-     }, {
         isbn: uploadBook.isbn,
         title: uploadBook.title,
         authors: uploadBook.authors,
         publication_date: uploadBook.publication_date,
         quantity: uploadBook.quantity,
         price: uploadBook.price
-    })
+    }, 
+    {
+        headers: {'Authorization': localStorage.getItem('authToken')}
+     })
     .then(res => {
         console.log("Registered")
         return res
@@ -40,17 +41,16 @@ export const postedbooks = books => {
 
 export const updatebooks = book => {
     return axios
-    .put("books/update/",
-    {
-        headers: {"Authorization": localStorage.getItem('authToken')} 
-    },  {
-            isbn: book.isbn,
-            title: book.title,
-            authors: book.authors,
-            publication_date: book.publication_date,
-            quantity: book.quantity,
-            price: book.price
-    })
+    .put('/books/update',  {
+        isbn: book.isbn,
+        oldisbn: book.oldisbn,
+        publication_date: book.publication_date,
+        authors: book.authors,
+        title: book.title,
+        quantity: book.quantity,
+        price: book.price
+    },
+    {headers: {'Authorization': localStorage.getItem('authToken')}})
     .then(res=> {
         console.log('Got books uploaded by user')
         return res
@@ -60,25 +60,22 @@ export const updatebooks = book => {
     });
 }
 
+//Delete book api call
 export const deletebook = deletebook => {
-    console.log("Object "+ deletebook);
-    console.log("ISBN: "+ deletebook.isbn)
     return axios
-    .delete('books/deletebook', {headers: {'Authorization': localStorage.getItem('authToken')},
-    data: {
-        isbn: deletebook.isbn
-    }})
-    .then(res => {
-        console.log("Book Deleted")
+    .put('/books/deletebook',  {
+        isbn: deletebook.isbn,
+        deleted: true
+    },
+    {headers: {'Authorization': localStorage.getItem('authToken')}})
+    .then(res=> {
+        console.log('Book deleted!')
         return res
     })
     .catch(err => {
-        console.log(err.response)
-        return err.response        
-    })
+        return err.response
+    });
 }
-
-
 
 export const getallbooks = books => {
     console.log('Inside axios')

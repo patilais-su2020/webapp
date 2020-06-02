@@ -41,6 +41,10 @@ module.exports = db.sequelize.define(
                 max: 9999.99
             }
         },
+        deleted: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
+        },
         createdOn: {
             type: Sequelize.DATE,
             defaultValue: Sequelize.NOW

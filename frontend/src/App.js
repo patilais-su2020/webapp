@@ -8,6 +8,8 @@ import SignUp from './components/views/signup'
 import AppWrapper from './components/views/AppWrapper'
 import Profile from './components/views/profile'
 import Uploaded from './components/views/uploaded'
+import UpdateBook from './components/views/updatebook'
+import UploadBook from './components/views/bookupload'
 
 function App() {
   return (
@@ -19,7 +21,9 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/view" component={Uploaded} />
+            <Route exact path="/bookupload" component={UploadBook} />
             <Route exact path="/signup" component={SignUp}/>
+            <Route exact path="/updatebook/:isbn" component={UpdateBook}/>
           </div>
           <Route path="/" component={AppWrapper} />
       </div>

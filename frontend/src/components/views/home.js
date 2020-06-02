@@ -58,20 +58,29 @@ function Home() {
                                     Shop Books Now! Happy Reading!
                                 </h3>
                                 <div className=" row text-center mt-5">
-                                    <div className="col-sm-6 mx-auto">
-                                        <Link to="/upload">
-                                            <button className="btn btn-lg input-block-level btn-primary btn" style={{width: "100%", color:"white"}}>
+                                <div className="col-sm-4 mx-auto">
+                                    <Link to="/home">
+                                        <button className="btn btn-lg input-block-level btn-primary btn" style={{ width: "100%", color: "white" }}>
+                                            BUY BOOKS
+                                            </button>
+                                    </Link>
+                                </div>
+            
+                                <div className="col-sm-4 mx-auto">
+                                    <Link to="/view">
+                                        <button className="btn btn-lg input-block-level btn-primary btn" style={{ width: "100%", color: "white" }}>
+                                            VIEW UPLOADED BOOKS
+                                            </button>
+                                    </Link>
+                                </div>
+
+                                <div className="col-sm-4 mx-auto">
+                                    <Link to="/bookupload">
+                                        <button className="btn btn-lg input-block-level btn-primary btn" style={{ width: "100%", color: "white" }}>
                                             SELL BOOKS
                                             </button>
-                                        </Link>
-                                    </div>
-                                    <div className="col-sm-6 mx-auto">
-                                        <Link to="/view">
-                                            <button className="btn btn-lg input-block-level btn-primary btn" style={{width: "100%", color:"white"}}>
-                                                UPLOADED BOOKS
-                                            </button>
-                                        </Link>
-                                    </div>
+                                    </Link>
+                                </div>
                                 </div>
                                 <br/>
                                 <div className="row m-5">
