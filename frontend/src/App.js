@@ -10,6 +10,7 @@ import Profile from './components/views/profile'
 import Uploaded from './components/views/uploaded'
 import UpdateBook from './components/views/updatebook'
 import UploadBook from './components/views/bookupload'
+import Cart from './components/views/Cart'
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
             <Route exact path="/view" component={Uploaded} />
             <Route exact path="/bookupload" component={UploadBook} />
             <Route exact path="/signup" component={SignUp}/>
-            <Route exact path="/updatebook/:isbn" component={UpdateBook}/>
+            <Route exact path="/updatebook/:isbn" component={UpdateBook}/> 
+            <Route exact path="/cart" component={Cart}></Route> 
           </div>
           <Route path="/" component={AppWrapper} />
       </div>
