@@ -26,6 +26,7 @@ function Home() {
         addtocart(cartItems).then( res => {
             if(res.status === 200){
                 console.log(res.data.message)
+                alert('Added to cart')
             } else {
                 alert(res.data.message)
             }

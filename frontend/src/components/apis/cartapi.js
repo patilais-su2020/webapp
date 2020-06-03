@@ -20,11 +20,11 @@ export const addtocart = cartItem => {
 }
 
 export const getcartItems = cartItem => {
+    console.log(cartItem.buyer_id)
     return axios
-    .post('/cart/getcart', 
-    {
-        buyer_id: cartItem.buyer_id
-    })
+    .get('cart/getcart',  {
+        headers: {'buyerId': cartItem.buyer_id}
+     })
     .then(res => {
         console.log("Got cart details")
         return res

@@ -62,19 +62,21 @@ router.post('/addtocart', (req, res, next) => {
 
 router.get('/getcart', (req, res, next) => {
 
+    console.log("BuyerID:" + req.headers['buyerid'])
     Books.hasMany(Cart, {foreignKey: "id"})
 
     Books.findAll({
         raw: true,
         include: [{
           model: Cart,
-          where: {buyer_id: req.body.buyer_id}
+          where: {buyer_id: req.headers['buyerid']}
          }]
       }).then(posts => {
         console.log(posts);
         res.status(200).json({
             status: 200,
-            message: "Got all books"
+            message: "Got all books",
+            cart: posts
         })
     }).catch(err => {
         console.log(err)

@@ -1,0 +1,22 @@
+.row-heading {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem
+}
+
+.row-elements {
+    border: 0;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(158, 158, 158, 0.1);
+}
+
+.cart-header {
+    border: 0;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem
+}
