@@ -17,9 +17,9 @@ function Home() {
                 setBooks(res.data)
                 console.log(res.data)
             } else if(res.status===400){
-                alert('Unable to fetch details')
+                alert(res.data.message)
             } else if(res.status===500){
-                alert('User not found')
+                alert(res.data.message)
             }
         })
     }, [])

@@ -64,16 +64,17 @@ class UpdateBook extends Component {
         }
         else {
             bookupload(bookcreate).then(res => {
+                console.log(res           )
                 if(res.status===200){
                     alert('Book updated successfully!')
                     this.props.history.push('/view')
                 } else if(res.status===400) {
-                    alert(res.message)
+                    alert(res.data.message)
                 } else if(res.status===500) {
-                    console.log(res)
-                    alert(res.message)
+                    console.log(res.data.message)
+                    alert(res.data.message)
                 }else if(res.status===409) {
-                    alert(res.message)
+                    alert(res.data.message)
                 }else{
                     alert('Error updating details')
                 }

@@ -29,15 +29,57 @@ router.post('/upload', (req, res, next) => {
                 user_id: user.id,
                 deleted: false
             }
-            Books.findAll({
+            Books.findOne({
                 where: {
                     user_id: user.id,
-                    isbn: books.isbn,
-                    deleted: false
+                    isbn: books.isbn
+                    // deleted: false
                 }
             })
                 .then(book => {
-                    if (Array.isArray(book) && book.length == 0) {
+                    console.log("Inside create book")
+                    console.log(book)
+                    if(book!=null && book.dataValues.deleted===true){
+                        Books.update(books, {
+                            where: {
+                                [Op.and]: [
+                                    {
+                                        isbn: books.isbn,
+                                        user_id: user.id,
+                                        deleted: true
+                                    }
+                                ]
+                            }
+                        }).then(book => {
+                            res.status(200).json({
+                                status: 200,
+                                message: 'Book Detail created after delete!!'
+                            })
+                            console.log("Book created after delete! !")
+                        })
+                        .catch(error => {
+                            if (JSON.stringify(error).includes("Validation error")) {
+                                res.status(400).json({
+                                    status: 400,
+                                    message: "Validation error"
+                                })
+                            } else if (JSON.stringify(error).includes("ER_DUP_ENTRY")) {
+        
+                                res.status(409).json({
+                                    status: 409,
+                                    message: "Duplicate entry"
+                                })
+                            } else {
+                                console.log("inside book update")
+                                console.log(error)
+                                res.status(500).json({
+                                    status: 500,
+                                    message: "Error uploading book"
+                                })
+                            }
+                        })
+                    }
+                    else if (book == null) {
                         Books.create(books)
                             .then(book => {
                                 res.status(200).json({

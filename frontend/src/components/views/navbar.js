@@ -43,6 +43,11 @@ class Navbar extends Component {
                         Logout
                     </a>
                 </li>
+                <li className="nav-item">
+                    <Link to="/cart" className="nav-link">
+                        Cart
+                    </Link>
+                </li>
             </ul>
         )
 
