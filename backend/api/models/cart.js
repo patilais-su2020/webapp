@@ -30,5 +30,6 @@ module.exports = db.sequelize.define(
         }
     },
     {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
 })
