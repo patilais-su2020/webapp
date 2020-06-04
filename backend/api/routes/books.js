@@ -319,6 +319,10 @@ router.get('/allbooks', (req, res, next) => {
     })
         .then(user => {
             Books.findAll({
+                order: [
+                    // Will escape title and validate DESC against a list of valid direction parameters
+                    ['price', 'ASC'],
+                ],
                 where: {
                     user_id: {
                         [Op.not]: user.id
