@@ -39,7 +39,16 @@ function Uploaded(props) {
             if (res.status === 200) {
                 window.$("#mi-modal-"+index).modal('hide');
                 alert('successfully deleted')
-                // history.go();
+                postedbooks().then(res => {
+                    if (res.status === 200) {
+                        setBooks(res.data)
+                        console.log(res.data)
+                    } else if (res.status === 400) {
+                        alert('Unable to fetch details')
+                    } else if (res.status === 500) {
+                        alert('User not found')
+                    }
+                })
             } else if (res.status === 400) {
                 alert('Unable to fetch details')
             } else if (res.status === 500) {
@@ -48,8 +57,8 @@ function Uploaded(props) {
         })
     }
 
-    function deleteEntryDenied() {
-        window.$("#mi-modal").modal('hide');
+    function deleteEntryDenied(index) {
+        window.$("#mi-modal-"+index).modal('hide');
     }
 
     function updateClicked(book) {
@@ -85,7 +94,7 @@ function Uploaded(props) {
                                         </div>
                                         <div className="modal-footer">
                                             <button type="button" className="btn btn-default" id="modal-btn-yes" onClick={() => deleteEntryConfirm(book,index)}>Yes</button>
-                                            <button type="button" className="btn btn-primary" id="modal-btn-no" onClick={() => deleteEntryDenied()}>No</button>
+                                            <button type="button" className="btn btn-primary" id="modal-btn-no" onClick={() => deleteEntryDenied(index)}>No</button>
                                         </div>
                                     </div>
                                 </div>

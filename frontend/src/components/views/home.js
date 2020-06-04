@@ -11,7 +11,13 @@ function Home() {
     const authToken = localStorage.authToken
     const decode = jwt_decode(authToken)
 
+    const showModal = (index) => {
+        window.$("#mi-modal-"+index).modal('show');
+    }
+
     const addToCart = (book, index) => {
+        // console.log('Inside delete Clicked::',index)
+       
         var cartQuantity = window.$("#cartQuantity-"+index).val()
 
         if(cartQuantity > book.quantity){
@@ -24,16 +30,23 @@ function Home() {
             book_id: book.id
         }
         addtocart(cartItems).then( res => {
+            console.log(res.status)
             if(res.status === 200){
                 console.log(res.data.message)
                 alert('Added to cart')
-            } else {
-                alert(res.data.message)
+                window.$("#mi-modal-"+index).modal('hide');
+            } else if(res.status === 409) {
+                alert("Already exists in cart")
             }
         })
         }
 
     }
+
+    function quantityDenied(index) {
+        window.$("#mi-modal-"+index).modal('hide');
+    }
+
 
     useEffect(() => {
         getallbooks().then(res => {
@@ -63,11 +76,28 @@ function Home() {
                         <hr />
                         <div className="card-footer text-center">
                             <div className="form-group row">
-                                <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h6>Quantity :</h6></label>
-                                <input type="number" min="1" max={book.quantity}  id={`${"cartQuantity-"+index}`}className=" col-sm-5 col-md-4 col-lg-5 form-control" required 
-                                defaultValue={book.quantity} />
+                                {/* <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h6>Quantity :</h6></label> */}
+                                {/* <input type="number" min="1" max={book.quantity}  id={`${"cartQuantity-"+index}`}className=" col-sm-5 col-md-4 col-lg-5 form-control" required 
+                                defaultValue={book.quantity} /> */}
                             </div>
-                            <button className="btn btn-lg input-block-level btn-primary btn" onClick={()=> addToCart(book, index)}> Add to Cart</button>
+                            <button className="btn btn-lg input-block-level btn-primary btn" onClick={()=> showModal(index)}> Add to Cart</button>
+                            <div className="modal fade" tabIndex={`${index}`} role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id= {`${"mi-modal-"+index}`}>
+                                <div className="modal-dialog modal-sm">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                        <input type="number" min="1" max={book.quantity}  id={`${"cartQuantity-"+index}`}className=" col-sm-5 col-md-4 col-lg-5 form-control" required 
+                                                defaultValue={book.quantity} /> 
+                                            {/* <h4 className="modal-title" id="myModalLabel">Do you want to delete this book?</h4> */}
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-default" id="modal-btn-yes" onClick={() => addToCart(book,index)}>Yes</button>
+                                            <button type="button" className="btn btn-primary" id="modal-btn-no" onClick={() => quantityDenied(index)}>No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="alert" role="alert" id="result"></div>
                         </div>
                     </div>
                 </div>

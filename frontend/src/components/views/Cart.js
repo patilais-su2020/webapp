@@ -21,6 +21,7 @@ class Cart extends Component {
         getcartItems(buyerId).then(cartItems => {
 
             if (cartItems.status === 200) {
+                console.log(cartItems)
                 this.setState({
                     cart: cartItems.data.cart
                 })
@@ -30,25 +31,26 @@ class Cart extends Component {
 
     renderCartItems = () => {
         let cartItemView = this.state.cart.map((data, key) => {
-            var totalprice = parseFloat(data.price) * parseInt(data['carts.quantity'])
+            var isDeleted = data['book.deleted'] ? "Book is no longer available!" : null
+            var totalprice = parseFloat(data['book.price']) * parseInt(data.quantity)
             return (
                 <div className="row text-center border row-elements">
                     <div className="col-xs-12 col-sm-6 text-left">
-                        <h5><b>Title: </b>{data.title}</h5>
-                        <h5><b>Authors: </b>{data.authors}</h5>
-                        <h5><b>Isbn: </b>{data.isbn}</h5>
-                        <h5><b>Publication Date: </b>{data.publication_date}</h5>
-
+                        <h5><b>Title: </b>{data['book.title']}</h5>
+                        <h5><b>Authors: </b>{data['book.authors']}</h5>
+                        <h5><b>Isbn: </b>{data['book.isbn']}</h5>
+                        <h5><b>Publication Date: </b>{data['book.publication_date']}</h5>
+                        <h5 className="text-danger"><b>{isDeleted}</b></h5>
                     </div>
                     <div className="col-xs-12 col-sm-2">
-                        <h5>$ {data.price}</h5>
+                        <h5>{isDeleted ? null : `$ ${data['book.price']}` }</h5>
                     </div>
                     <div className="col-xs-12 col-sm-2" >
-                        <h5>{data['carts.quantity']}</h5>
+                        <h5>{isDeleted ? null: data.quantity}</h5>
                     </div>
                     <div className="col-xs-12 col-sm-2" >
                         <h5>
-                            <span class="label label-success">$ {totalprice}</span>
+                            <span class="label label-success">{isDeleted ? null : `$ ${totalprice}`}</span>
                         </h5>
                     </div>
                 </div>

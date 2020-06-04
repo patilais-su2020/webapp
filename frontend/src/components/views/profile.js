@@ -54,6 +54,8 @@ class Profile extends Component {
         
         if(validatePassword || user.password==='') {
           updateProfile(user).then(res => {
+              alert("Updated Profile")
+              document.getElementById('passField').value = ""
               this.props.history.push('/profile')
           })
         } else {
@@ -89,7 +91,7 @@ class Profile extends Component {
 
                           <div className="form-group row">
                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Change Password:</h5></label>
-                            <input className=" col-sm-5 col-md-4 col-lg-5 form-control" type="password" onChange={this.changePassword}/>
+                            <input className=" col-sm-5 col-md-4 col-lg-5 form-control" id ="passField" type="password" onChange={this.changePassword}/>
                           </div>
               
                         <button type="submit" className="btn btn-mm btn-primary btn float-right ml-2"> Save </button>

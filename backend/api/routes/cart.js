@@ -15,14 +15,16 @@ router.post('/addtocart', (req, res, next) => {
         quantity: req.body.quantity,
         book_id: req.body.book_id
     }
+    console.log(cartItem)
 
     Cart.findOne({
         where: {
             seller_id: cartItem.seller_id,
-            id: cartItem.book_id,
+            book_id: cartItem.book_id,
             buyer_id: cartItem.buyer_id
         }
     }).then(book => {
+        console.log("Checking for book object")
         if(!book) {
             Cart.create(cartItem).then( item => {
                 res.status(200).json({
@@ -62,14 +64,19 @@ router.post('/addtocart', (req, res, next) => {
 
 router.get('/getcart', (req, res, next) => {
 
-    console.log("BuyerID:" + req.headers['buyerid'])
-    Books.hasMany(Cart, {foreignKey: "id"})
+    Cart.belongsTo(Books, { targetKey: 'id', foreignKey: 'book_id'})
 
-    Books.findAll({
+    console.log("BuyerID:" + req.headers['buyerid'])
+    // Books.hasMany(Cart, {foreignKey: "id"})
+
+    Cart.findAll({
+        where: {
+            buyer_id: req.headers['buyerid']
+        },
         raw: true,
         include: [{
-          model: Cart,
-          where: {buyer_id: req.headers['buyerid']}
+          model: Books
+          
          }]
       }).then(posts => {
         console.log(posts);
