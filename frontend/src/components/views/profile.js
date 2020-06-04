@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import jwt_decode from 'jwt-decode'
-import {updateProfile} from '../apis/api'
+import {updateProfile} from '../apis/userapi'
 import '../views/style/profile.css'
 
 class Profile extends Component {
@@ -54,6 +54,8 @@ class Profile extends Component {
         
         if(validatePassword || user.password==='') {
           updateProfile(user).then(res => {
+              alert("Updated Profile")
+              document.getElementById('passField').value = ""
               this.props.history.push('/profile')
           })
         } else {
@@ -73,28 +75,23 @@ class Profile extends Component {
                           <h2 className="text-center mb-5">Profile Information</h2>
                         
                           <div className="form-group row">
-                           <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>First name:</h5></label>
+                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>First name:</h5></label>
                             <input type="text" className=" col-sm-5 col-md-4 col-lg-5" required defaultValue={this.state.firstName} onChange={this.changeFirstName} />
-                          
                           </div>
 
                           <div className="form-group row">
-                           <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Last name:</h5></label>
-                          
+                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Last name:</h5></label>
                             <input id="last_name" type="text" className=" col-sm-5 col-md-4 col-lg-5 form-control" required value={this.state.lastName} onChange={this.changeLastName}/>
-                          
                           </div>
 
                           <div className="form-group row">
-                           <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Email Id:</h5></label>
-                          
+                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Email Id:</h5></label>
                             <input className="col-sm-5 col-md-4 col-lg-5 form-control" type="email" value={this.state.email} disabled/>
-                          
                           </div>
 
                           <div className="form-group row">
                            <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Change Password:</h5></label>
-                            <input className=" col-sm-5 col-md-4 col-lg-5 form-control" type="password" onChange={this.changePassword}/>
+                            <input className=" col-sm-5 col-md-4 col-lg-5 form-control" id ="passField" type="password" onChange={this.changePassword}/>
                           </div>
               
                         <button type="submit" className="btn btn-mm btn-primary btn float-right ml-2"> Save </button>

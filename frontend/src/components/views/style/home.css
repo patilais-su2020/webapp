@@ -1,0 +1,29 @@
+.displaybooks {
+    border: 0;
+    /* box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1); */
+    margin-bottom: 1rem;
+    justify-content: space-between;
+  }
+  .displaybooks:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2); 
+  }
+
+  .displaybooks .card-header .card-title {
+    margin-top: 2rem;
+    margin-bottom: 0rem;
+    font-weight: 300;
+    font-size: 1.5rem;
+  }
+  
+  .displaybooks .card-body {
+    padding: 1rem;
+  }
+
+  .btn {
+    font-size: 80%;
+    border-radius: 5rem;
+    letter-spacing: .1rem;
+    font-weight: bold;
+    padding: 1rem;
+    transition: all 0.2s;
+  }
