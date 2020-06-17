@@ -15,18 +15,24 @@ module.exports = db.sequelize.define(
         },
         buyer_id: {
             type: Sequelize.INTEGER,
-            references: 'users',
-            referencesKey: 'id'
+            references: {
+                model: 'users',
+                key: 'id'
+            }
         },
         seller_id: {
             type: Sequelize.INTEGER,
-            references: 'users',
-            referencesKey: 'id'
+            references: {
+                model: 'users',
+                key: 'id'
+            }
         },
         book_id: {
             type: Sequelize.INTEGER,
-            references: 'books',
-            referencesKey: 'id'
+            references: {
+                model: 'books',
+                key: 'id'
+            }
         }
     },
     {

@@ -55,10 +55,13 @@ module.exports = db.sequelize.define(
         },
         user_id: {
             type: Sequelize.INTEGER,
-            references: 'users',
-            referencesKey: 'id'
+            references: {
+                model: 'users',
+                key: 'id'
+            }
         }
     },
     {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
 })
