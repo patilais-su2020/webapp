@@ -11,10 +11,12 @@ module.exports = db.sequelize.define(
         },
         quantity: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             defaultValue: 1
         },
         buyer_id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             references: {
                 model: 'users',
                 key: 'id'
@@ -22,6 +24,7 @@ module.exports = db.sequelize.define(
         },
         seller_id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             references: {
                 model: 'users',
                 key: 'id'
@@ -29,6 +32,7 @@ module.exports = db.sequelize.define(
         },
         book_id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             references: {
                 model: 'books',
                 key: 'id'

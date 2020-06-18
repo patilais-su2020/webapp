@@ -1,8 +1,11 @@
 const Sequelize = require('sequelize')
 const db = {}
+const db_name = process.env.db_name || 'webappdb'
+const db_username = process.env.db_username || 'admin'
+const db_password = process.env.db_password || 'admin'
 
-const sequelize = new Sequelize('webappdb', 'admin', 'admin', {
-    host: "localhost",
+const sequelize = new Sequelize(db_name, db_username, db_password, {
+    host: process.env.db_hostname || "localhost",
     port: 3306,
     dialect: 'mysql',
     pool: {

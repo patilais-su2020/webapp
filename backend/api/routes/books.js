@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const Books = require("../models/books");
 const User = require("../models/user");
+const Images = require("../models/images");
 const { Op } = require("sequelize");
 
 //Upload books
@@ -38,7 +39,6 @@ router.post('/upload', (req, res, next) => {
             })
                 .then(book => {
                     console.log("Inside create book")
-                    console.log(book)
                     if(book!=null && book.dataValues.deleted===true){
                         Books.update(books, {
                             where: {
@@ -53,6 +53,7 @@ router.post('/upload', (req, res, next) => {
                         }).then(book => {
                             res.status(200).json({
                                 status: 200,
+                                book_id: book.id,
                                 message: 'Book Detail created after delete!!'
                             })
                             console.log("Book created after delete! !")
@@ -84,6 +85,7 @@ router.post('/upload', (req, res, next) => {
                             .then(book => {
                                 res.status(200).json({
                                     status: 200,
+                                    book_id: book.id,
                                     message: book.title + 'uploaded for sale!'
                                 })
                                 console.log("Uploaded book")
@@ -143,11 +145,15 @@ router.get('/booksposted', (req, res, next) => {
         }
     })
         .then(user => {
+            Books.hasMany(Images, { targetKey: 'id', foreignKey: 'book_id'})
             Books.findAll({
                 where: {
                     user_id: user.id,
                     deleted: false
-                }
+                },
+                include: [{
+                    model: Images
+                }]
             })
                 .then(books => {
                     res.status(200).json(books)
@@ -175,9 +181,7 @@ router.get('/booksposted', (req, res, next) => {
 
 //Update Book details
 router.put('/update', (req, res, next) => {
-    console.log(req)
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
-    console.log(decoded);
     User.findOne({
         where: {
             email: decoded.email
@@ -318,6 +322,8 @@ router.get('/allbooks', (req, res, next) => {
         }
     })
         .then(user => {
+
+            Books.hasMany(Images, { targetKey: 'id', foreignKey: 'book_id'})
             Books.findAll({
                 order: [
                     // Will escape title and validate DESC against a list of valid direction parameters
@@ -328,7 +334,11 @@ router.get('/allbooks', (req, res, next) => {
                         [Op.not]: user.id
                     },
                     deleted: false
-                }
+                },
+                include: [{
+                    model: Images,
+                    // where: { id: db.Sequelize.col('carts.pid') }
+                }]
             }).then(books => {
                 res.status(200).json(books)
                 console.log("Fetched all books")

@@ -17,7 +17,6 @@ function Uploaded(props) {
         postedbooks().then(res => {
             if (res.status === 200) {
                 setBooks(res.data)
-                console.log(res.data)
             } else if (res.status === 400) {
                 alert('Unable to fetch details')
             } else if (res.status === 500) {
@@ -33,8 +32,7 @@ function Uploaded(props) {
 
     function deleteEntryConfirm(book, index) {
         console.log('Inside delete Entry')
-        console.log(book)
-        console.log(index)
+ 
         deletebook(book).then(res => {
             if (res.status === 200) {
                 window.$("#mi-modal-"+index).modal('hide');
@@ -61,29 +59,50 @@ function Uploaded(props) {
         window.$("#mi-modal-"+index).modal('hide');
     }
 
-    function updateClicked(book) {
+    function updateClicked(book, images) {
         props.history.push({
             pathname: `/updatebook/${book.isbn}`,
-            state: { book: book }
+            state: { book: book, images: images}
         })
     }
 
     const renderCards = Books.map((book, index) => {
             return (
-                <div className="col-lg-6 col-md-8 col-sm-24">
+                <div key={index} className="col-lg-6 col-md-8 col-sm-24">
                     <div className="card  displaybooks">
                         <div className="card-header">
                             <h4 className="card-title  text-center" style={{ fontWeight: "bold" }}>{book.title}</h4>
                         </div>
-                        <div className="card-body d-flex flex-column">
+                        <div id="carouselExampleControls" className="carousel slide" data-ride="carousel">
+                        <div className="carousel-inner">{
+                            book.images.map((image,inindex) => {
+                                return (
+                                    <div key={inindex} className={`carousel-item ${inindex === 0 ? 'active' : ''}`}>
+                                        <img className="d-block w-100" src={image.location} alt="First slide" />
+                                    </div>
+                                )
+                            })
+                        }
+                        </div>
+                        <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span className="sr-only">Previous</span>
+                        </a>
+                        <a className="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span className="sr-only">Next</span>
+                        </a>
+                    </div>
+                        <div className="card-body d-flex flex-column text-center">
                             <hr />
                             <h5><b>Author: {book.authors}</b></h5>
                             <h6>Quantity: {book.quantity}</h6>
                             <h5>Price: ${book.price}</h5>
                             <hr />
                         </div>
+
                         <div className="card-footer text-center">
-                            <button className="btn btn-sm btn-primary btn mr-5" onClick={() => updateClicked(book)}> Update</button>
+                            <button className="btn btn-sm btn-primary btn mr-5" onClick={() => updateClicked(book, book.images)}> Update</button>
                             <button className="btn btn-sm btn-primary btn ml-5" id="delete-btn" onClick={()=>deleteClicked(index)}> Delete</button>
                             <div className="modal fade" tabIndex={`${index}`} role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id= {`${"mi-modal-"+index}`}>
                                 <div className="modal-dialog modal-sm">

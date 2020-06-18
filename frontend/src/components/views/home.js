@@ -16,7 +16,6 @@ function Home() {
     }
 
     const addToCart = (book, index) => {
-        // console.log('Inside delete Clicked::',index)
        
         var cartQuantity = window.$("#cartQuantity-"+index).val()
 
@@ -62,11 +61,32 @@ function Home() {
     }, [])
 
     const renderCards = Books.map((book, index) => {
+        console.log(book.images)
         return (
-            <div className="col-lg-6 col-md-8 col-sm-24">
-                <div className="card  displaybooks">
+            <div key={index} className="col-lg-12 col-md-8 col-sm-12">
+                <div className="card displaybooks">
                     <div className="card-header">
                         <h4 className="card-title  text-center" style={{ fontWeight: "bold" }}>{book.title}</h4>
+                    </div>
+                    <div id="carouselExampleControls" className="carousel slide" data-ride="carousel">
+                        <div className="carousel-inner">{
+                            book.images.map((image,inindex) => {
+                                return (
+                                    <div key={inindex} className={`carousel-item ${inindex === 1 ? 'active' : ''}`}>
+                                        <img className="d-block w-100" src={image.location} alt="First slide" />
+                                    </div>
+                                )
+                            })
+                        }
+                        </div>
+                        <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span className="sr-only">Previous</span>
+                        </a>
+                        <a className="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span className="sr-only">Next</span>
+                        </a>
                     </div>
                     <div className="card-body d-flex flex-column text-center">
                         <hr />
@@ -74,7 +94,8 @@ function Home() {
                         <h5><b>Available Quantity: </b>{book.quantity}</h5>
                         <h5><b>Price: ${book.price}</b></h5>
                         <hr />
-                        <div className="card-footer text-center">
+                    </div>
+                    <div className="card-footer text-center">
                             <div className="form-group row">
                                 {/* <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h6>Quantity :</h6></label> */}
                                 {/* <input type="number" min="1" max={book.quantity}  id={`${"cartQuantity-"+index}`}className=" col-sm-5 col-md-4 col-lg-5 form-control" required 
@@ -99,12 +120,10 @@ function Home() {
                             </div>
                             <div className="alert" role="alert" id="result"></div>
                         </div>
-                    </div>
                 </div>
             </div>
         )
     })
-
 
     return(
                 <div className="container">
