@@ -27,9 +27,9 @@ router.delete('/deletefroms3', (req, res, next) => {
         key = ""
     } = req.body.key;
     aws.config.update({
-        secretAccessKey: process.env.prod_secret_key || "2B+2dh3LM5+RqtlwPHnbzm/iH8NYcD3MV9CwMiMW",
-        accessKeyId: process.env.prod_secret_key || "AKIAJ2FSUYCE344W4CIQ",
-        region: process.env.prod_region || 'us-east-1'
+        secretAccessKey: process.env.prod_secret_key,
+        accessKeyId: process.env.prod_secret_key,
+        region: process.env.prod_region
     });
     const s3 = new aws.S3();
     var params = {
