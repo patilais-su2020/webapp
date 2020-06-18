@@ -11,22 +11,32 @@ module.exports = db.sequelize.define(
         },
         quantity: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             defaultValue: 1
         },
         buyer_id: {
             type: Sequelize.INTEGER,
-            references: 'users',
-            referencesKey: 'id'
+            allowNull: false,
+            references: {
+                model: 'users',
+                key: 'id'
+            }
         },
         seller_id: {
             type: Sequelize.INTEGER,
-            references: 'users',
-            referencesKey: 'id'
+            allowNull: false,
+            references: {
+                model: 'users',
+                key: 'id'
+            }
         },
         book_id: {
             type: Sequelize.INTEGER,
-            references: 'books',
-            referencesKey: 'id'
+            allowNull: false,
+            references: {
+                model: 'books',
+                key: 'id'
+            }
         }
     },
     {

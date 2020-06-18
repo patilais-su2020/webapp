@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const db = require("../../db/dbmysql");
 
 module.exports = db.sequelize.define(
-    'user',
+    'users',
     {
         id: {
             type: Sequelize.INTEGER,
@@ -10,18 +10,23 @@ module.exports = db.sequelize.define(
             autoIncrement: true
         },
         firstName: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         },
         lastName: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         },
         email: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         },
         password: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         }
     },
     {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
 })

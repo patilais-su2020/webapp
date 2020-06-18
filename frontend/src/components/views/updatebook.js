@@ -2,26 +2,37 @@ import React, {Component} from 'react'
 // import jwt_decode from 'jwt-decode'
 import {updatebooks} from '../apis/booksapi'
 import '../views/style/profile.css'
+import {deletebookimage, deletefroms3,uploads3image,addbulkimages} from '../apis/imagesapi'
+import FormData from 'form-data'
+
 
 class UpdateBook extends Component {
     constructor() {
         super()
         this.state= {
+            id: '',
             isbn: '',
             title: '',
             authors: '',
             publication_date: '',
             quantity: '',
-            price: ''
+            price: '',
+            images: [],
+            imgCollection: []
         }
         this.onSubmit = this.onSubmit.bind(this)
+        this.onFileChange = this.onFileChange.bind(this);
+
     }
 
     componentDidMount() {
         const book = this.props.location.state.book;
+        const imagesvar = this.props.location.state.images;
+
         // const authToken = localStorage.authToken
         // const decode = jwt_decode(authToken)
         this.setState({
+            id: book.id,
             isbn: book.isbn,
             authors: book.authors,
             price: book.price,
@@ -29,7 +40,8 @@ class UpdateBook extends Component {
             quantity: book.quantity,
             title: book.title,
             user_id: book.user_id,
-            oldisbn: this.props.match.params.isbn
+            oldisbn: this.props.match.params.isbn,
+            images: imagesvar.images
         })
     }
 
@@ -60,6 +72,10 @@ class UpdateBook extends Component {
     changePublicationDate = (event) => {
         this.setState({ publication_date: event.target.value });
     }
+   
+    onFileChange(e) {
+      this.setState({ imgCollection: [...this.state.imgCollection, ...e.target.files] })
+    }
 
     onSubmit(e) {
         e.preventDefault()
@@ -79,12 +95,44 @@ class UpdateBook extends Component {
             alert('ISBN should consists of numbers')
         } else if(updatedbook.price < 0.01 || updatedbook.price > 9999.99){
             alert('Price should be greater than $0.01 and less than $9999.99')
-        }
+        } 
         else {
             updatebooks(updatedbook).then(res => {
                 if(res.status===200){
-                    alert('Book updated successfully!')
-                    this.props.history.push('/view')
+                  console.log(this.state.imgCollection)
+                  if(this.state.imgCollection.length>0){
+                     // Multiple image upload
+                     var formData = new FormData();
+                     for (const key of Object.keys(this.state.imgCollection)) {
+                         formData.append('image', this.state.imgCollection[key])
+                     }
+
+                  uploads3image(formData).then(s3res => { 
+
+                    if(s3res.status==200){
+              
+                      const newData = s3res.data.data.map(v => ({ ...v, book_id: this.state.id }))
+                      addbulkimages(newData).then(imgtable => {
+                          if(imgtable.status===200)  {
+                            
+                            alert('Book updated successfully!')
+                            this.props.history.push('/view')
+
+                        } else {                        
+                            alert('Error uploading image')
+                        }
+                      })
+                    }
+                    else {
+                      alert('Error uploading image to s3')
+                    }
+
+                  }) 
+                } else {
+                  alert('Book updated successfully!')
+                  this.props.history.push('/view')
+                }
+
                 } else if(res.status===400) {
                     alert(res.message)
                 } else if(res.status===500) {
@@ -97,7 +145,33 @@ class UpdateBook extends Component {
                 }
 
             })
-        }
+        } 
+    }
+
+    deleteImage(image, inindex) {
+     
+      const data = {
+        id: image.id,
+        key: image.key
+      }
+
+      deletefroms3(data).then(res => {
+
+          if(res.status===200){
+            deletebookimage(data).then(res =>{
+
+              if(res.status===200){
+                alert("Image Deleted successfully")
+                this.props.history.push('/view')
+              } else {
+                alert("Error deleting Image")
+              }
+            })
+          } else {
+            alert("Error deleting image from s3")
+          }
+      })
+        
     }
 
     render(){
@@ -140,8 +214,29 @@ class UpdateBook extends Component {
                             <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Publication Date:</h5></label>
                             <input type="date" className=" col-sm-5 col-md-4 col-lg-5 form-control" required defaultValue={this.state.publication_date} onChange={this.changePublicationDate} />
                           </div>
-              
-                        <button type="submit" className="btn btn-mm btn-primary btn float-right ml-2"> Save </button>
+
+                          <div className="row">
+                          {
+                              this.props.location.state.images.map((image,inindex) => {
+                                return (
+                                  <div> 
+                                  <div className="col-sm-5 col-md-4 col-lg-5">
+                                    <img src={image.location} style={{ width: "150px", height:"100px" }}></img>
+                                  </div>
+                                  <div className="col-sm-5 col-md-4 col-lg-5">
+                                      <button className="btn btn-sm btn-primary btn ml-5" onClick={() => this.deleteImage(image, inindex)}>Delete</button>
+                                  </div>
+                                  </div>
+                                )
+                            })
+                          }
+                          </div>
+
+                          <div className="form-group row">
+                            <input type="file" name="imgCollection" onChange={this.onFileChange} multiple />
+                          </div>
+
+                          <button type="submit" className="btn btn-mm btn-primary btn float-right ml-2"> Save </button>
                         <button type="reset" className="btn btn-mm btn-light btn-outline-secondary btn float-right"> Cancel </button>
                       </form>
                     </div>  

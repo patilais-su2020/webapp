@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./api/routes/user');
 const booksRoutes = require('./api/routes/books');
 const cartRoutes = require('./api/routes/cart');
+const imageRoutes = require('./api/routes/images');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}))
@@ -25,6 +26,7 @@ app.use((req,res,next) => {
 app.use('/user', userRoutes);
 app.use('/books', booksRoutes);
 app.use('/cart', cartRoutes);
+app.use('/bookimages', imageRoutes);
 
 app.use((req,res, next) => {
     const error = new Error('Not Found');

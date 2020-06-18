@@ -1,7 +1,11 @@
 import React, {Component} from 'react'
 // import jwt_decode from 'jwt-decode'
 import {bookupload} from '../apis/booksapi'
+import {uploads3image} from '../apis/imagesapi'
+import {addbulkimages} from '../apis/imagesapi'
 import '../views/style/profile.css'
+import FormData from 'form-data'
+
 
 class UpdateBook extends Component {
     constructor() {
@@ -12,10 +16,16 @@ class UpdateBook extends Component {
             authors: '',
             publication_date: '',
             quantity: '',
-            price: ''
+            price: '',
+            imgCollection: []
         }
         this.onSubmit = this.onSubmit.bind(this)
+        this.onFileChange = this.onFileChange.bind(this);
     }
+
+    onFileChange(e) {
+      this.setState({ imgCollection: [...this.state.imgCollection, ...e.target.files] })
+  }
 
     changeIsbn = (event) => {
       this.setState({ isbn: event.target.value });
@@ -61,13 +71,44 @@ class UpdateBook extends Component {
             alert('ISBN should consists of numbers')
         } else if(bookcreate.price < 0.01 || bookcreate.price > 9999.99){
             alert('Price should be greater than $0.01 and less than $9999.99')
+        } else if(this.state.imgCollection.length===0){
+          alert('Please select an image to upload')
         }
         else {
             bookupload(bookcreate).then(res => {
-                console.log(res           )
+
                 if(res.status===200){
-                    alert('Book updated successfully!')
-                    this.props.history.push('/view')
+                  
+                  // Multiple image upload
+                  var formData = new FormData();
+                  for (const key of Object.keys(this.state.imgCollection)) {
+                      formData.append('image', this.state.imgCollection[key])
+                  }
+                  console.log("Form Data "+ JSON.stringify(formData))
+                  console.log(formData.length)
+
+                  uploads3image(formData).then(s3res => { 
+
+                    if(s3res.status==200){
+
+                      const newData = s3res.data.data.map(v => ({ ...v, book_id: res.data.book_id }))
+                      addbulkimages(newData).then(imgtable => {
+                          if(imgtable.status===200)  {
+                            console.log(imgtable)
+                            alert('Book updated successfully!')
+                            this.props.history.push('/view')
+
+                        } else {                        
+                            alert('Error uploading image')
+                        }
+                      })
+                    }
+                    else {
+                      alert('Error uploading image to s3')
+                    }
+
+                  })                 
+
                 } else if(res.status===400) {
                     alert(res.data.message)
                 } else if(res.status===500) {
@@ -124,6 +165,10 @@ class UpdateBook extends Component {
                             <input type="date" className=" col-sm-5 col-md-4 col-lg-5 form-control" required defaultValue={this.state.publication_date} onChange={this.changePublicationDate} />
                           </div>
               
+                          <div className="form-group row">
+                            <input type="file" name="imgCollection" onChange={this.onFileChange} multiple />
+                          </div>
+
                         <button type="submit" className="btn btn-mm btn-primary btn float-right ml-2"> Save </button>
                         <button type="reset" className="btn btn-mm btn-light btn-outline-secondary btn float-right"> Cancel </button>
                       </form>
