@@ -26,11 +26,6 @@ router.delete('/deletefroms3', (req, res, next) => {
     let {
         key = ""
     } = req.body.key;
-    aws.config.update({
-        secretAccessKey: process.env.prod_secret_key,
-        accessKeyId: process.env.prod_secret_key,
-        region: process.env.prod_region
-    });
     const s3 = new aws.S3();
     var params = {
         Bucket: 'webapp.aishwarya.patil',
