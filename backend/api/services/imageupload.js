@@ -2,13 +2,6 @@ const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 
-
-aws.config.update({
-    secretAccessKey: process.env.prod_secret_key,
-    accessKeyId: process.env.prod_secret_key ,
-    region: process.env.prod_region
-});
-
 const s3 = new aws.S3();
 
 const fileFilter = (req, file, cb) => {
@@ -27,10 +20,12 @@ const upload = multer({
         bucket: 'webapp.aishwarya.patil',
         acl: 'public-read',
         metadata: function (req, file, cb) {
-            cb(null, { fileName: "images/books/profile/" + Date.now() + "."+file.originalname.split(".")[1] });
+            var fs = file.originalname.split(".");
+            cb(null, { fileName: "images/books/profile/" + Date.now() + "."+fs.pop() });
         },
         key: function (req, file, cb) {
-            cb(null, "images/books/profile/" + Date.now() + "."+file.originalname.split(".")[1]);
+            var fs = file.originalname.split(".");
+            cb(null, "images/books/profile/" + Date.now() + "."+fs.pop());
         }
     })
 })
