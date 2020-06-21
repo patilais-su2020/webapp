@@ -22,24 +22,23 @@ router.post('/uploads3image', (req, res, next) => {
 
 // Delete from s3
 router.delete('/deletefroms3', (req, res, next) => {
-    console.log(req.body)
-    let {
-        key = ""
-    } = req.body.key;
     const s3 = new aws.S3();
     var params = {
         Bucket: 'webapp.aishwarya.patil',
-        Key: key
+        Key: req.body.key
     };
-    s3.deleteObject(params, function (err) {
-        if (err) res.send({
-            status: 400,
-            message: err
-        })
-        else res.send({
-            status: 200,
-            message: "Success"
-        })
+    s3.deleteObject(params, function (err, data) {
+        if (!err) {
+            res.send({
+                status: 200,
+                message: "Success"
+            })
+        } else {
+            res.send({
+                status: 400,
+                message: err
+            })
+        }
         return;
     });
 })

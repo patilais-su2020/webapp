@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-// import jwt_decode from 'jwt-decode'
 import {updatebooks} from '../apis/booksapi'
 import '../views/style/profile.css'
 import {deletebookimage, deletefroms3,uploads3image,addbulkimages} from '../apis/imagesapi'
 import FormData from 'form-data'
+import moment from 'moment';
 
 
 class UpdateBook extends Component {
@@ -28,15 +28,14 @@ class UpdateBook extends Component {
     componentDidMount() {
         const book = this.props.location.state.book;
         const imagesvar = this.props.location.state.images;
+        var pubdate = moment(book.publication_date).format('YYYY-MM-DD');
 
-        // const authToken = localStorage.authToken
-        // const decode = jwt_decode(authToken)
         this.setState({
             id: book.id,
             isbn: book.isbn,
             authors: book.authors,
             price: book.price,
-            publication_date: book.publication_date,
+            publication_date: pubdate,
             quantity: book.quantity,
             title: book.title,
             user_id: book.user_id,
@@ -212,7 +211,7 @@ class UpdateBook extends Component {
 
                           <div className="form-group row">
                             <label className="col-sm-5 col-md-4 col-lg-5 control-label "><h5>Publication Date:</h5></label>
-                            <input type="date" className=" col-sm-5 col-md-4 col-lg-5 form-control" required defaultValue={this.state.publication_date} onChange={this.changePublicationDate} />
+                            <input type="date" className="col-sm-5 col-md-4 col-lg-5 form-control" required defaultValue={this.state.publication_date} onChange={this.changePublicationDate} />
                           </div>
 
                           <div className="row">
