@@ -122,7 +122,6 @@ router.put('/profile/update', (req, res, next) => {
     }
   })
     .then(user => {
-      console.log('Password: '+ req.body.password)
         const data = {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
