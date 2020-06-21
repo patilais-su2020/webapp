@@ -122,10 +122,11 @@ router.put('/profile/update', (req, res, next) => {
     }
   })
     .then(user => {
-      if(req.body.password === '' || req.body.password == ' '){
+      console.log('Password: '+ req.body.password)
         const data = {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
+          password: req.body.password
         }
         User.update(data, {where: { email: decoded.email } })
         .then(user => {
@@ -139,31 +140,6 @@ router.put('/profile/update', (req, res, next) => {
             error: err
           })
         })
-    
-      } else {
-        const data = {
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          password: req.body.password
-        }
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(data.password, salt, (err, hash) => {
-            data.password = hash
-            User.update(data, {where: { email: decoded.email } })
-              .then(user => {
-                res.json({
-                  message: decoded.email + ' details updated!',
-                  status: 200
-                })
-              })
-              .catch(err => {
-                res.status(500).json({
-                  error: err
-                })
-              })
-          });
-        });
-      }
     })
     .catch(err => {
       console.log(err);

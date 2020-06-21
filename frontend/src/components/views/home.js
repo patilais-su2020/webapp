@@ -69,15 +69,17 @@ function Home() {
                         <h4 className="card-title  text-center" style={{ fontWeight: "bold" }}>{book.title}</h4>
                     </div>
                     <div id="carouselExampleControls" className="carousel slide" data-ride="carousel">
-                        <div className="carousel-inner">{
+                        <div className="carousel-inner">
+                            {
                             book.images.map((image,inindex) => {
                                 return (
-                                    <div key={inindex} className={`carousel-item ${inindex === 1 ? 'active' : ''}`}>
+                                    <div key={inindex} className={`carousel-item ${inindex === 0 ? 'active' : ''}`}>
                                         <img className="d-block w-100" src={image.location} alt="First slide" />
                                     </div>
                                 )
                             })
                         }
+
                         </div>
                         <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
                             <span className="carousel-control-prev-icon" aria-hidden="true"></span>
