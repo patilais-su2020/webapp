@@ -147,22 +147,6 @@ router.post('/addbulkimages', (req, res, next) => {
         imageSet = []
     } = req.body;
 
-    console.log(JSON.stringify(imageSet))
-    // var resArr = [];
-    
-    // var myObject = eval('(' + imageSet + ')');
-    // for (i in myObject)
-    // {
-    //     let obj = {
-    //         location : myObject[i]["location"],
-    //         key : myObject[i]["key"],
-    //         book_id : myObject[i]["book_id"],
-    //         originalname: myObject[i]["originalname"],
-    //     }
-    //     resArr.push(obj);
-    // }
-
-    // console.log(resArr);
     BookImages.bulkCreate(imageSet, {returning: true})
         .then(data => {
             res.send({
@@ -208,6 +192,34 @@ router.get('/allimages', (req, res, next) => {
         })
     })  
 });
+
+router.delete('/deleteallimages', (req, res, next) => {
+    console.log("======================")
+    console.log(req.body.key)
+    let {
+        key = []
+    } = req.body;
+
+
+    const s3 = new aws.S3();
+    var params = {
+        Bucket: 'webapp.aishwarya.patil',
+        Delete: {
+            Objects: key
+        }
+    };
+    s3.deleteObjects(params, function (err) {
+        if (err) res.send({
+            status: 400,
+            message: err
+        })
+        else res.send({
+            status: 200,
+            message: "Success"
+        })
+        return;
+    });
+})
 
 
 module.exports = router;

@@ -105,4 +105,17 @@ export const getallbookimages = data => {
     })
 }
 
-
+export const deleteallimages = key => {
+    return axios
+    .delete('/bookimages/deleteallimages', {
+        data: { key }
+    })
+    .then(res => {
+        console.log("Deleted from s3")
+        return res
+    })
+    .catch(err => {
+        console.log(err.response)
+        return err.response        
+    })
+}
