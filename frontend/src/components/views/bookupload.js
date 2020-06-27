@@ -71,9 +71,10 @@ class UpdateBook extends Component {
             alert('ISBN should consists of numbers')
         } else if(bookcreate.price < 0.01 || bookcreate.price > 9999.99){
             alert('Price should be greater than $0.01 and less than $9999.99')
-        } else if(this.state.imgCollection.length===0){
-          alert('Please select an image to upload')
         }
+        //  else if(this.state.imgCollection.length===0){
+        //   alert('Please select an image to upload')
+        // }
         else {
             bookupload(bookcreate).then(res => {
 
@@ -91,6 +92,7 @@ class UpdateBook extends Component {
 
                     if(s3res.status==200){
 
+                      console.log(res.data)
                       const newData = s3res.data.data.map(v => ({ ...v, book_id: res.data.book_id }))
                       addbulkimages(newData).then(imgtable => {
                           if(imgtable.status===200)  {

@@ -45,7 +45,6 @@ router.delete('/deletefroms3', (req, res, next) => {
 
 // Delete from image from table
 router.delete('/deletebookimage', (req, res, next) => {
-    console.log(req.body)
     let {
         id
     } = req.body.id;
@@ -147,22 +146,6 @@ router.post('/addbulkimages', (req, res, next) => {
         imageSet = []
     } = req.body;
 
-    console.log(JSON.stringify(imageSet))
-    // var resArr = [];
-    
-    // var myObject = eval('(' + imageSet + ')');
-    // for (i in myObject)
-    // {
-    //     let obj = {
-    //         location : myObject[i]["location"],
-    //         key : myObject[i]["key"],
-    //         book_id : myObject[i]["book_id"],
-    //         originalname: myObject[i]["originalname"],
-    //     }
-    //     resArr.push(obj);
-    // }
-
-    // console.log(resArr);
     BookImages.bulkCreate(imageSet, {returning: true})
         .then(data => {
             res.send({
@@ -194,7 +177,6 @@ router.get('/allimages', (req, res, next) => {
             model: Books
         }]
     }).then(images => {
-        console.log(images);
         res.status(200).json({
             status: 200,
             message: "Got all books",
@@ -208,6 +190,73 @@ router.get('/allimages', (req, res, next) => {
         })
     })  
 });
+
+router.delete('/deleteallimagesfroms3', (req, res, next) => {
+    let {
+        key = []
+    } = req.body;
+
+
+    const s3 = new aws.S3();
+    var params = {
+        Bucket: 'webapp.aishwarya.patil',
+        Delete: {
+            Objects: key
+        }
+    };
+    s3.deleteObjects(params, function (err) {
+        if (err) res.send({
+            status: 400,
+            message: err
+        })
+        else res.send({
+            status: 200,
+            message: "Success"
+        })
+        return;
+    });
+})
+
+
+// Delete from image from table
+router.delete('/deleteallimages', (req, res, next) => {
+    let {
+        book_id
+    } = req.body;
+    
+    if (!book_id) {
+        res.send({
+            status: 400,
+            message: "Please enter valid book image id"
+        });
+        return;
+    }
+    BookImages.destroy({
+        where: { book_id: book_id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    status: 200,
+                    message: "Book image was deleted successfully!"
+                });
+                return;
+            } else {
+                res.send({
+                    status: 400,
+                    message: `Cannot delete Book image with id=${book_id}. Maybe book image was not found!`
+                });
+                return;
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                status: 500,
+                message: "Could not delete Book image with id=" + book_id
+            });
+            return;
+        });
+})
 
 
 module.exports = router;

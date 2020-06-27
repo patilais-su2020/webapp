@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import jwt_decode from 'jwt-decode'
-import { postedbooks } from '../apis/booksapi'
-import { deletebook } from '../apis/booksapi'
+import { postedbooks, deletebook } from '../apis/booksapi'
+import { deleteallimagesfroms3,deleteallimages } from '../apis/imagesapi'
 import { Link } from 'react-router-dom'
 import './style/home.css'
 import { useHistory } from 'react-router';
@@ -31,16 +31,35 @@ function Uploaded(props) {
     }
 
     function deleteEntryConfirm(book, index) {
-        console.log('Inside delete Entry')
- 
+       
+            const imagekeys = book.images.map(v => ({
+                Key: v.key
+            }))
+            console.log(imagekeys)
+
         deletebook(book).then(res => {
             if (res.status === 200) {
+
                 window.$("#mi-modal-"+index).modal('hide');
+
+                // Delete images from s3
+                deleteallimagesfroms3(imagekeys).then(res => {
+                    if(res.status===200){
+                        deleteallimages(book).then(res => {
+                            if(res.status!=200){
+                                alert("Error deleting book from table")
+                            }
+                        })
+                    } else {
+                        alert("Error deleting images of the book")
+                    }
+                })    
+                
                 alert('successfully deleted')
+                //Get call for books
                 postedbooks().then(res => {
                     if (res.status === 200) {
                         setBooks(res.data)
-                        console.log(res.data)
                     } else if (res.status === 400) {
                         alert('Unable to fetch details')
                     } else if (res.status === 500) {
