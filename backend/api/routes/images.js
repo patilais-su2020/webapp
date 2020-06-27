@@ -45,7 +45,6 @@ router.delete('/deletefroms3', (req, res, next) => {
 
 // Delete from image from table
 router.delete('/deletebookimage', (req, res, next) => {
-    console.log(req.body)
     let {
         id
     } = req.body.id;
@@ -178,7 +177,6 @@ router.get('/allimages', (req, res, next) => {
             model: Books
         }]
     }).then(images => {
-        console.log(images);
         res.status(200).json({
             status: 200,
             message: "Got all books",
@@ -193,9 +191,7 @@ router.get('/allimages', (req, res, next) => {
     })  
 });
 
-router.delete('/deleteallimages', (req, res, next) => {
-    console.log("======================")
-    console.log(req.body.key)
+router.delete('/deleteallimagesfroms3', (req, res, next) => {
     let {
         key = []
     } = req.body;
@@ -219,6 +215,47 @@ router.delete('/deleteallimages', (req, res, next) => {
         })
         return;
     });
+})
+
+
+// Delete from image from table
+router.delete('/deleteallimages', (req, res, next) => {
+    let {
+        book_id
+    } = req.body;
+    
+    if (!book_id) {
+        res.send({
+            status: 400,
+            message: "Please enter valid book image id"
+        });
+        return;
+    }
+    BookImages.destroy({
+        where: { book_id: book_id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    status: 200,
+                    message: "Book image was deleted successfully!"
+                });
+                return;
+            } else {
+                res.send({
+                    status: 400,
+                    message: `Cannot delete Book image with id=${book_id}. Maybe book image was not found!`
+                });
+                return;
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                status: 500,
+                message: "Could not delete Book image with id=" + book_id
+            });
+            return;
+        });
 })
 
 

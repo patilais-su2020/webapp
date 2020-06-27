@@ -83,6 +83,7 @@ router.post('/upload', (req, res, next) => {
                     else if (book == null) {
                         Books.create(books)
                             .then(book => {
+                                console.log("================"+ JSON.stringify(books))
                                 res.status(200).json({
                                     status: 200,
                                     book_id: book.id,

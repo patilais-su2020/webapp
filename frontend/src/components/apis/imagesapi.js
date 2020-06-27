@@ -105,13 +105,31 @@ export const getallbookimages = data => {
     })
 }
 
-export const deleteallimages = key => {
+export const deleteallimagesfroms3 = key => {
     return axios
-    .delete('/bookimages/deleteallimages', {
+    .delete('/bookimages/deleteallimagesfroms3', {
         data: { key }
     })
     .then(res => {
         console.log("Deleted from s3")
+        return res
+    })
+    .catch(err => {
+        console.log(err.response)
+        return err.response        
+    })
+}
+
+// Delete all images from table
+export const deleteallimages = data => {
+    return axios
+    .delete('/bookimages/deleteallimages', {
+        data: {
+            book_id: data.id
+        }
+    })
+    .then(res => {
+        console.log("Deleted all images from table")
         return res
     })
     .catch(err => {
