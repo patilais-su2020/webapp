@@ -46,12 +46,6 @@ jobs:
             cp ../appspec.yml .
             cp ../README.md .
             zip -r csye6225-webapp-${CIRCLE_BUILD_NUM}.zip .
-      # - run:
-      #     name: Compress Artifacts
-      #     command: |
-      #       echo "Current directory: "`pwd`
-      #       echo "Files in directory:"`ls`
-      #       zip -r csye6225-webapp-${CIRCLE_BUILD_NUM}.zip .
       - run:
           name: Upload Artifacts to S3
           command: |
