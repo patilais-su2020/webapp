@@ -3,7 +3,8 @@
 sudo npm install pm2 -g
 cd /home/ubuntu/backend/
 sudo npm install
-sudo -E pm2 --name webapp start npm -- start
+cd
+sudo -E --preserve-env pm2 --name webapp start npm -- start
 cd /home/ubuntu/frontend/
 sudo npm install
-sudo -E pm2 --name webapp start npm -- start
+sudo -E --preserve-env pm2 --name webapp start npm -- start
