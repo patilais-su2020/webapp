@@ -3,8 +3,8 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   build:
-    # executor:
-    #   name: node/default
+    executor:
+      name: node/default
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -23,19 +23,19 @@ jobs:
             aws configure set default.region us-east-1
             aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
             aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-      # - node/with-cache:
-      #     steps:
-      #       - run:
-      #           name: Build artifacts
-      #           command:  |
-      #             cd backend && npm install
-      #             cd ../frontend && npm install
-      #       - run:
-      #           name: clean node_modules
-      #           command: |
-      #             sudo rm -rf node_modules
-      #             cd frontend
-      #             sudo rm -rf node_modules 
+      - node/with-cache:
+          steps:
+            - run:
+                name: Build artifacts
+                command:  |
+                  cd backend && npm install
+                  cd ../frontend && npm install
+            - run:
+                name: clean node_modules
+                command: |
+                  sudo rm -rf node_modules
+                  cd frontend
+                  sudo rm -rf node_modules 
 
       - run: 
           name: Compress Artifacts
