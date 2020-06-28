@@ -5,13 +5,14 @@ jobs:
   build:
     executor:
       name: node/default
+      
     steps:
-    - checkout
-    - run:
-      name: Install packages
-      command: |
-        node --version
-        sudo apt install wget zip unzip curl -y
+      - checkout
+      - run:
+          name: Install packages
+          command: |
+            node --version
+            sudo apt install wget zip unzip curl -y
       - node/with-cache:
           steps:
             - run:
