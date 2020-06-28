@@ -22,29 +22,43 @@ jobs:
             aws configure set default.region us-east-1
             aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
             aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-      - node/with-cache:
-          steps:
-            - run:
-                name: Build artifacts
-                command:  |
-                  cd backend && npm install
-                  cd ../frontend && npm install
-            - run:
-                name: clean node_modules
-                command: |
-                  sudo rm -rf node_modules
-                  cd frontend
-                  sudo rm -rf node_modules 
-      - run:
+      # - node/with-cache:
+      #     steps:
+      #       - run:
+      #           name: Build artifacts
+      #           command:  |
+      #             cd backend && npm install
+      #             cd ../frontend && npm install
+      #       - run:
+      #           name: clean node_modules
+      #           command: |
+      #             sudo rm -rf node_modules
+      #             cd frontend
+      #             sudo rm -rf node_modules 
+
+      - run: 
           name: Compress Artifacts
           command: |
             echo "Current directory: "`pwd`
-            echo "Files in directory:"`ls`
+            mkdir -p codedeploy_artifacts
+            cd codedeploy_artifacts
+            cp -r ../backend/ .
+            cp -r ../frontend/ .
+            cp -r ../Scripts/ .
+            cp ../appspec.yml .
+            cp ../README.md .
             zip -r csye6225-webapp-${CIRCLE_BUILD_NUM}.zip .
+      # - run:
+      #     name: Compress Artifacts
+      #     command: |
+      #       echo "Current directory: "`pwd`
+      #       echo "Files in directory:"`ls`
+      #       zip -r csye6225-webapp-${CIRCLE_BUILD_NUM}.zip .
       - run:
           name: Upload Artifacts to S3
           command: |
             ls -la
+            cd codedeploy_artifacts
             aws configure list
             aws s3 cp csye6225-webapp-${CIRCLE_BUILD_NUM}.zip s3://codedeploy.neucloudwebapp.me --sse
       - run:
@@ -53,6 +67,7 @@ jobs:
             pwd
             ls
             # cd /home/circleci/project
+            cd codedeploy_artifacts
             aws deploy create-deployment --output json --application-name csye6225-webapp --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name csye6225-webapp-deployment --s3-location bucket=codedeploy.neucloudwebapp.me,bundleType=zip,key=csye6225-webapp-${CIRCLE_BUILD_NUM}.zip
   test:
     executor:
