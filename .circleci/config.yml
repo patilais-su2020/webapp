@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Install packages
           command: |
-            node --version
+            # node --version
             sudo apt install wget zip unzip curl -y
       - run:
           name: Install aws cli
