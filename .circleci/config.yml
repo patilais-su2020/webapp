@@ -3,9 +3,10 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   build:
-    executor:
-      name: node/default
-      
+    # executor:
+    #   name: node/default
+    docker:
+      - image: 'cimg/base:stable'
     steps:
       - checkout
       - run:
@@ -67,7 +68,7 @@ jobs:
             pwd
             ls
             # cd /home/circleci/project
-            cd codedeploy_artifacts
+            # cd codedeploy_artifacts
             aws deploy create-deployment --output json --application-name csye6225-webapp --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name csye6225-webapp-deployment --s3-location bucket=codedeploy.neucloudwebapp.me,bundleType=zip,key=csye6225-webapp-${CIRCLE_BUILD_NUM}.zip
   test:
     executor:
