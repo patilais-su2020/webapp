@@ -7,11 +7,11 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - run:
-          name: Install packages
-          command: |
-            node --version
-            sudo apt install wget zip unzip curl -y
+      - run: 
+        name: Install packages
+        command: |
+          node --version
+          sudo apt install wget zip unzip curl -y
        - run:
           name: Install aws cli
           command: |
