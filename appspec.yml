@@ -15,4 +15,4 @@ hooks:
       runas: ubuntu
   ApplicationStart:
     - location: Scripts/applicationStart.sh
-      runas: ubuntu
+      runas: root
