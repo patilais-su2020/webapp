@@ -6,13 +6,13 @@ files:
     destination: /home/ubuntu
 hooks:
   ApplicationStop:
-    - location: ./applicationStop.sh
+    - location: Scripts/applicationStop.sh
       timeout: 200
       runas: ubuntu
   AfterInstall:
-    - location: ./afterInstall.sh     
+    - location: Scripts/afterInstall.sh     
       timeout: 200
       runas: ubuntu
   ApplicationStart:
-    - location: ./applicationStart.sh
-    - runas: ubuntu
+    - location: Scripts/applicationStart.sh
+      runas: ubuntu
