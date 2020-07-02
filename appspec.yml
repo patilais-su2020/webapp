@@ -7,13 +7,16 @@ files:
 hooks:
   ApplicationStop:
     - location: Scripts/applicationStop.sh
-      timeout: 200
+      timeout: 500
       runas: ubuntu
   AfterInstall:
     - location: Scripts/afterInstall.sh     
-      timeout: 200
+      timeout: 500
+      runas: ubuntu
+    - location: Scripts/applicationStart.sh     
+      timeout: 100
       runas: ubuntu
   ApplicationStart:
-    - location: Scripts/applicationStart.sh     
+    - location: Scripts/applicationAfterStart.sh     
       timeout: 100
       runas: ubuntu
