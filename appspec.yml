@@ -8,7 +8,7 @@ hooks:
   ApplicationStop:
     - location: Scripts/applicationStop.sh
       timeout: 500
-      runas: root
+      runas: ubuntu
   AfterInstall:
     - location: Scripts/afterInstall.sh     
       timeout: 500
