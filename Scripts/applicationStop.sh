@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
 
-pm2 delete nodeserver || true
-pm2 delete webapp || true
+sudo rm -rf /home/ubuntu/*
+# sudo rm -rf /opt/codedeploy-agent/deployment-root/*
+# sudo service codedeploy-agent restart
+sudo service code-deploy-agent status
+sudo systemctl stop amazon-cloudwatch-agent.service
+
+cd /home/ubuntu
+sudo pm2 kill
+sudo pm2 delete all
