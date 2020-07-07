@@ -1,8 +1,9 @@
 #!/bin/bash -e
 
 sudo rm -rf /home/ubuntu/*
-sudo rm -rd sudo rm -rf /opt/codedeploy-agent/deployment-root/*
-sudo service codedeploy-agent restart
+# sudo rm -rf /opt/codedeploy-agent/deployment-root/*
+# sudo service codedeploy-agent restart
+sudo service code-deploy-agent status
 cd /home/ubuntu
 sudo pm2 kill
 sudo pm2 delete all
