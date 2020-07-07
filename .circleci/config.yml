@@ -43,6 +43,7 @@ jobs:
             cp -r ../backend/ .
             cp -r ../frontend/ .
             cp -r ../Scripts/ .
+            cp -r ../cloud-config/ .
             cp ../appspec.yml .
             cp ../README.md .
             zip -r csye6225-webapp-${CIRCLE_BUILD_NUM}.zip .
