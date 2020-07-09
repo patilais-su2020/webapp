@@ -3,15 +3,6 @@
     "metrics_collection_interval": 10,
     "logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log"
     },
-    "metrics": {
-    "metrics_collected": {
-        "statsd":{
-            "service_address":":8125",
-            "metrics_collection_interval":10,
-            "metrics_aggregation_interval":0
-         }
-    }
-    },
     "logs": {
     "logs_collected": {
         "files": {
@@ -29,15 +20,24 @@
                 "timezone": "Local"
             },
             {
-            "file_path": "/home/ubuntu/.pm2/logs/backend-out.log",
-            "log_group_name": "csye6225",
-            "log_stream_name": "webapp-backend",
-            "timezone": "Local"
+                "file_path": "/home/ubuntu/.pm2/logs/backend-out.log",
+                "log_group_name": "csye6225",
+                "log_stream_name": "webapp-backend",
+                "timezone": "Local"
             }
         ]
         }
     },
     "log_stream_name": "webapp_log_stream_name",
     "force_flush_interval" : 15
+    },
+    "metrics": {
+        "metrics_collected": {
+            "statsd":{
+                "service_address":":8125",
+                "metrics_collection_interval":10,
+                "metrics_aggregation_interval":0
+            }
+        }
     }
 }
