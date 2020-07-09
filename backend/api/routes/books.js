@@ -6,6 +6,8 @@ const Books = require("../models/books");
 const User = require("../models/user");
 const Images = require("../models/images");
 const { Op } = require("sequelize");
+var StatsD = require('statsd-client'),
+client = new StatsD();
 
 //Upload books
 router.post('/upload', (req, res, next) => {
@@ -138,6 +140,8 @@ router.post('/upload', (req, res, next) => {
 
 //Get all uploaded books
 router.get('/booksposted', (req, res, next) => {
+    client.increment('books_uploaded_view')
+    console.log(client.increment('books_uploaded_view'))
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
 
     User.findOne({
@@ -313,7 +317,8 @@ router.put('/deletebook', (req, res, next) => {
 
 //Get all books
 router.get('/allbooks', (req, res, next) => {
-
+    client.increment('books_viewed')
+    console.log(client.increment('books_viewed'))
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
     console.log('Inside getallbooks')
 
