@@ -7,10 +7,13 @@ const User = require("../models/user");
 const Images = require("../models/images");
 const { Op } = require("sequelize");
 var StatsD = require('statsd-client'),
-client = new StatsD();
+client = new StatsD({port: 8125, prefix: 'counter_api'});
+timerClient = new StatsD({port: 8125, prefix: 'timing_apis'})
+timerClientDbQueries = new StatsD({port: 8125, prefix: 'timing_db_queries'})
 
 //Upload books
 router.post('/upload', (req, res, next) => {
+    var timer = new Date();
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
 
     User.findOne({
@@ -53,11 +56,13 @@ router.post('/upload', (req, res, next) => {
                                 ]
                             }
                         }).then(book => {
+                            timerClientDbQueries.timing('upload_book_db_query',timer)
                             res.status(200).json({
                                 status: 200,
                                 book_id: book.id,
                                 message: 'Book Detail created after delete!!'
                             })
+                            timerClient.timing('upload_book', timer)
                             console.log("Book created after delete! !")
                         })
                         .catch(error => {
@@ -80,6 +85,7 @@ router.post('/upload', (req, res, next) => {
                                     message: "Error uploading book"
                                 })
                             }
+                            timerClient.timing('upload_book_error', timer)
                         })
                     }
                     else if (book == null) {
@@ -140,8 +146,9 @@ router.post('/upload', (req, res, next) => {
 
 //Get all uploaded books
 router.get('/booksposted', (req, res, next) => {
-    client.increment('books_uploaded_view')
-    console.log(client.increment('books_uploaded_view'))
+    var timer = new Date();
+
+    client.counter('books_uploaded_view',1)
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
 
     User.findOne({
@@ -186,6 +193,8 @@ router.get('/booksposted', (req, res, next) => {
 
 //Update Book details
 router.put('/update', (req, res, next) => {
+    var timer = new Date();
+
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
     User.findOne({
         where: {
@@ -255,6 +264,8 @@ router.put('/update', (req, res, next) => {
 
 //delete uploaded books
 router.put('/deletebook', (req, res, next) => {
+    var timer = new Date();
+
     console.log(req)
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
     console.log(decoded);
@@ -317,8 +328,9 @@ router.put('/deletebook', (req, res, next) => {
 
 //Get all books
 router.get('/allbooks', (req, res, next) => {
-    client.increment('books_viewed')
-    console.log(client.increment('books_viewed'))
+    var timer = new Date();
+
+    client.counter('books_viewed',1)
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
     console.log('Inside getallbooks')
 
