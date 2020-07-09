@@ -7,7 +7,7 @@ const User = require("../models/user");
 const Images = require("../models/images");
 const { Op } = require("sequelize");
 var StatsD = require('statsd-client'),
-client = new StatsD(8125);
+client = new StatsD();
 
 //Upload books
 router.post('/upload', (req, res, next) => {
