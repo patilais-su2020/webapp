@@ -18,20 +18,22 @@
         "files": {
         "collect_list": [
             {
-            "file_path": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log",
-            "log_group_name": "csye6225",
-            "log_stream_name": "webapp",
-            "timezone": "Local"
+                "file_path": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log",
+                "log_group_name": "csye6225",
+                "log_stream_name": "webapp",
+                "timezone": "Local"
             },
             {
                 "file_path": "/home/ubuntu/.pm2/logs/frontend-out.log",
                 "log_group_name": "csye6225",
-                "log_stream_name": "webapp-frontend"
+                "log_stream_name": "webapp-frontend",
+                "timezone": "Local"
             },
             {
                 "file_path": "/home/ubuntu/.pm2/logs/backend-out.log",
                 "log_group_name": "csye6225",
-                "log_stream_name": "webapp-backend"
+                "log_stream_name": "webapp-backend",
+                "timezone": "Local"
             }
         ]
         }
