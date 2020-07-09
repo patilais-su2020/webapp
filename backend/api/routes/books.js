@@ -7,11 +7,6 @@ const User = require("../models/user");
 const Images = require("../models/images");
 const { Op } = require("sequelize");
 
-var StatsD = require('statsd-client'),
-client = new StatsD({port: 8125, prefix: 'counter_api'});
-timerClient = new StatsD({port: 8125, prefix: 'timing_apis'})
-timerClientDbQueries = new StatsD({port: 8125, prefix: 'timing_db_queries'})
-
 //Upload books
 router.post('/upload', (req, res, next) => {
     var decoded = jwt.verify(req.headers['authorization'], 'secret');
@@ -83,7 +78,6 @@ router.post('/upload', (req, res, next) => {
                                     message: "Error uploading book"
                                 })
                             }
-                            timerClient.timing('upload_book_error', timer)
                         })
                     }
                     else if (book == null) {
