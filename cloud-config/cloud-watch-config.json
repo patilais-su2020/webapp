@@ -4,7 +4,7 @@
     "logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log"
     },
     "metrics": {
-    "namespace": "MyCustomNamespace",
+    "namespace": "CSYE_6225_Webapp",
     "metrics_collected": {
         "statsd":{
             "service_address":":8125",
@@ -118,12 +118,18 @@
             "file_path": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log",
             "log_group_name": "csye6225",
             "log_stream_name": "webapp",
-            "timezone": "UTC"
+            "timezone": "Local"
             },
             {
-            "file_path": "/opt/aws/amazon-cloudwatch-agent/logs/test.log",
-            "log_group_name": "test.log",
-            "log_stream_name": "test.log",
+            "file_path": "/home/ubuntu/.pm2/logs/frontend-out.log",
+            "log_group_name": "csye6225",
+            "log_stream_name": "webapp-frontend",
+            "timezone": "Local"
+            },
+            {
+            "file_path": "/home/ubuntu/.pm2/logs/backend-out.log",
+            "log_group_name": "csye6225",
+            "log_stream_name": "webapp-backend",
             "timezone": "Local"
             }
         ]
