@@ -1,40 +1,42 @@
 {
     "agent": {
-        "metrics_collection_interval": 10,
-        "logfile": "/var/logs/amazon-cloudwatch-agent.log"
-    },
-    "logs": {
-        "logs_collected": {
-            "files": {
-                "collect_list": [
-                    {
-                        "file_path": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log",                      
-                        "log_group_name": "csye6225",
-                        "log_stream_name": "webapp"
-                    },
-                    {
-                        "file_path": "/home/ubuntu/.pm2/logs/frontend-out.log",
-                        "log_group_name": "csye6225",
-                        "log_stream_name": "webapp-frontend"
-                    },
-                    {
-                        "file_path": "/home/ubuntu/.pm2/logs/backend-out.log",
-                        "log_group_name": "csye6225",
-                        "log_stream_name": "webapp-backend"
-                    }
-                ]
-            }
-        },
-        "log_stream_name": "cloudwatch_log_stream"
+    "metrics_collection_interval": 10,
+    "logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log"
     },
     "metrics": {
-        "namespace": "CSYE6225_CW_Agent",
-        "metrics_collected": {
-            "statsd": {
-                "service_address": ":8125",
-                "metrics_collection_interval": 10,
-                "metrics_aggregation_interval": 0
-            }
-        }
+    "namespace": "CSYE_6225_Webapp",
+    "metrics_collected": {
+        "statsd":{
+            "service_address":":8125",
+            "metrics_collection_interval":10,
+            "metrics_aggregation_interval":10
+         }
     }
-} 
+    },
+    "logs": {
+    "logs_collected": {
+        "files": {
+        "collect_list": [
+            {
+            "file_path": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log",
+            "log_group_name": "csye6225",
+            "log_stream_name": "webapp",
+            "timezone": "Local"
+            },
+            {
+                "file_path": "/home/ubuntu/.pm2/logs/frontend-out.log",
+                "log_group_name": "csye6225",
+                "log_stream_name": "webapp-frontend"
+            },
+            {
+                "file_path": "/home/ubuntu/.pm2/logs/backend-out.log",
+                "log_group_name": "csye6225",
+                "log_stream_name": "webapp-backend"
+            }
+        ]
+        }
+    },
+    "log_stream_name": "webapp_log_stream",
+    "force_flush_interval" : 15
+    }
+}
