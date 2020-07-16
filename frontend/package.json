@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "form-data": "^3.0.0",
+    "http-proxy-middleware": "^1.0.5",
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
     "moment": "^2.27.0",
@@ -38,6 +39,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:5000"
+  }
 }
