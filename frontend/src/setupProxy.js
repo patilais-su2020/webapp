@@ -3,7 +3,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://localhost:5000',
+      target: 'http://prod.neucloudwebapp.me:5000',
       changeOrigin: true,
     })
   );
