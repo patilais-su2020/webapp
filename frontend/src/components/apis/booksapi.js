@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const bookupload = uploadBook => {
     return axios
-    .post('books/upload', 
+    .post('/api/books/upload', 
     {
         isbn: uploadBook.isbn,
         title: uploadBook.title,
@@ -27,7 +27,7 @@ export const bookupload = uploadBook => {
 
 export const postedbooks = books => {
     return axios
-    .get('books/booksposted',  {
+    .get('/api/books/booksposted',  {
         headers: {'Authorization': localStorage.getItem('authToken')}
      })
     .then(res=> {
@@ -41,7 +41,7 @@ export const postedbooks = books => {
 
 export const updatebooks = book => {
     return axios
-    .put('/books/update',  {
+    .put('/api/books/update',  {
         isbn: book.isbn,
         oldisbn: book.oldisbn,
         publication_date: book.publication_date,
@@ -63,7 +63,7 @@ export const updatebooks = book => {
 //Delete book api call
 export const deletebook = deletebook => {
     return axios
-    .put('/books/deletebook',  {
+    .put('/api/books/deletebook',  {
         isbn: deletebook.isbn,
         deleted: true
     },
@@ -80,7 +80,7 @@ export const deletebook = deletebook => {
 export const getallbooks = books => {
     console.log('Inside axios')
     return axios
-    .get('/books/allbooks',
+    .get('/api/books/allbooks',
       {
        headers: {'Authorization': localStorage.getItem('authToken')}
     })

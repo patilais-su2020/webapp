@@ -7,6 +7,7 @@ const User = require("../models/user");
 
 //Register
 router.post("/register", (req, res, next) => {
+  console.log(req)
   if (!req.body.email) {
     res.status(400).json({
         status: 400,

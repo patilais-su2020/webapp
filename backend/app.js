@@ -61,10 +61,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/user', userRoutes);
-app.use('/books', booksRoutes);
-app.use('/cart', cartRoutes);
-app.use('/bookimages', imageRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/books', booksRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/bookimages', imageRoutes);
 
 app.use((req,res, next) => {
     const error = new Error('Not Found');
