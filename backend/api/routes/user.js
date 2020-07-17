@@ -37,6 +37,7 @@ router.post("/register", (req, res, next) => {
               .then(user => {
                 res.status(200).json({
                   status: 200,
+                  email: user.email,
                   message: user.email + ' account created!'
                 })
                 console.log("Registered")
