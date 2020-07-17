@@ -7,7 +7,7 @@ var expect = chai.expect;
 describe('POST /user/register', function () {
   it('responds with json error', function (done) {
     request(app)
-      .post('/user/register')
+      .post('/api/user/register')
       .send({ firstName: "Aishwarya", lastName: null, email: null, password: 'yourpassword' })
       .set('Accept', 'application/json')
       .expect('Content-Type', 'application/json; charset=utf-8')

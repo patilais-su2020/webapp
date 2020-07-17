@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const addtocart = cartItem => {
     return axios
-    .post('/cart/addtocart', 
+    .post('/api/cart/addtocart', 
     {
         seller_id: cartItem.seller_id,
         buyer_id: cartItem.buyer_id,
@@ -22,7 +22,7 @@ export const addtocart = cartItem => {
 export const getcartItems = cartItem => {
     console.log(cartItem.buyer_id)
     return axios
-    .get('cart/getcart',  {
+    .get('/api/cart/getcart',  {
         headers: {'buyerId': cartItem.buyer_id}
      })
     .then(res => {

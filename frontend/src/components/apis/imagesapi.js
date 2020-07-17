@@ -5,7 +5,7 @@ import FormData from 'form-data'
 export const uploads3image = data => {
     return axios({
         method: "POST",
-        url: '/bookimages/uploads3image',
+        url: '/api/bookimages/uploads3image',
         data: data,
         headers: {
           "Content-Type": "multipart/form-data"
@@ -23,7 +23,7 @@ export const uploads3image = data => {
 // Delete from s3 bucket
 export const deletefroms3 = data => {
     return axios
-    .delete('/bookimages/deletefroms3', {
+    .delete('/api/bookimages/deletefroms3', {
         data: { key: data.key}
        
     })
@@ -40,7 +40,7 @@ export const deletefroms3 = data => {
 // Delete image from table
 export const deletebookimage = data => {
     return axios
-    .delete('/bookimages/deletebookimage', {
+    .delete('/api/bookimages/deletebookimage', {
         data: {
         id: data
         }
@@ -58,7 +58,7 @@ export const deletebookimage = data => {
 // Add image to table
 export const addimage = data => {
     return axios
-    .post('/bookimages/addimage', {
+    .post('/api/bookimages/addimage', {
         book_id: data.book_id,
         location: data.location,
         originalname: data.originalname,
@@ -78,7 +78,7 @@ export const addimage = data => {
 export const addbulkimages = newData => {
     console.log(newData)
     return axios
-    .post('/bookimages/addbulkimages', {
+    .post('/api/bookimages/addbulkimages', {
         imageSet: newData
     }).then(res => {
         console.log("Added image to table")
@@ -93,7 +93,7 @@ export const addbulkimages = newData => {
 // Get images from the database
 export const getallbookimages = data => {
     return axios
-    .get('/bookimages/allimages', {
+    .get('/api/bookimages/allimages', {
         headers: {'book_id': data}
      }).then(res => {
         console.log("Added image to table")
@@ -107,7 +107,7 @@ export const getallbookimages = data => {
 
 export const deleteallimagesfroms3 = key => {
     return axios
-    .delete('/bookimages/deleteallimagesfroms3', {
+    .delete('/api/bookimages/deleteallimagesfroms3', {
         data: { key }
     })
     .then(res => {
@@ -123,7 +123,7 @@ export const deleteallimagesfroms3 = key => {
 // Delete all images from table
 export const deleteallimages = data => {
     return axios
-    .delete('/bookimages/deleteallimages', {
+    .delete('/api/bookimages/deleteallimages', {
         data: {
             book_id: data.id
         }
