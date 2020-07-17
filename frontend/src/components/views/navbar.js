@@ -1,11 +1,18 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
+import { logoutUser } from '../apis/userapi'
 
 class Navbar extends Component {
     logOut(e) {
         e.preventDefault()
-        localStorage.removeItem('authToken')
-        this.props.history.push('/')
+        logoutUser().then(res => {
+            if(res.status===200){
+                this.props.history.push('/')
+            } 
+            else {
+                alert("error logging out")
+            }
+        })
     }
 
     render(){

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
+var LocalStorage = require('node-localstorage').LocalStorage;
+localStorage = new LocalStorage('./scratch');
 
 const User = require("../models/user");
 
@@ -148,6 +150,15 @@ router.put('/profile/update', (req, res, next) => {
         error: err
       })
     })
+})
+
+//Update Profile
+router.post('/logout', (req, res, next) => {
+    res.status(200).json({
+      message: "Logged Out",
+      status : 200
+  
+    }) 
 })
 
 
