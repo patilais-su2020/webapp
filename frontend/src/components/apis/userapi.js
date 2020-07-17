@@ -60,3 +60,13 @@ export const updateProfile = user => {
     .then(r => console.log(r.status))
     .catch(e => {return e.response});
 }
+
+export const logoutUser = () => {
+    localStorage.removeItem('authToken')
+    return axios
+    .post("/api/user/logout")
+    .then(res => {
+        return res
+    })
+    .catch(e => {return e.response});
+}

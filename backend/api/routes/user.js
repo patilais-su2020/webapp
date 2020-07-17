@@ -150,5 +150,14 @@ router.put('/profile/update', (req, res, next) => {
     })
 })
 
+//Update Profile
+router.post('/logout', (req, res, next) => {
+    res.status(200).json({
+      message: "Logged Out",
+      status : 200
+  
+    }) 
+})
+
 
 module.exports = router;
