@@ -8,10 +8,10 @@ const sequelize = new Sequelize(db_name, db_username, db_password, {
     host: process.env.db_hostname || "localhost",
     port: 3306,
     dialect: 'mysql',
-    // dialectOptions: {
-    //     ssl: 'Amazon RDS'
+    dialectOptions: {
+        ssl: 'Amazon RDS'
 
-    // },
+    },
     pool: {
         max: 5,
         min: 0,
