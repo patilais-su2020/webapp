@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
+const aws = require('aws-sdk')
 
 const User = require("../models/user");
 
@@ -159,6 +160,58 @@ router.post('/logout', (req, res, next) => {
   
     }) 
 })
+
+
+//Forgot Password
+router.post('/resetpassword', (req, res, next) => {
+  if (!req.body.email) {
+      res.send({
+          status: 400,
+          message: "Email can not be empty!"
+      });
+      return;
+  }
+  console.log("User email"+req.body.email)
+  User.findOne({ where: { email: req.body.email } })
+      .then(data => {
+        console.log("Request object"+ data.email)
+          if (data && data.email) {
+              var params = {
+                  Message: `${req.body.email}:::${data.id}`,
+                  TopicArn: 'arn:aws:sns:us-east-1:918568617781:password_reset',
+              };
+              var publishTextPromise = new aws.SNS({ apiVersion: '2010-03-31' }).publish(params).promise();
+              publishTextPromise.then(
+                  function (data) {
+                      res.send({
+                          status: 200,
+                          message: "Success",
+                          data: JSON.stringify(data)
+                      })
+                  }).catch(
+                      function (err) {
+                          res.send({
+                              status: 400,
+                              message: err
+                          })
+                          return;
+                      })
+          } else {
+              res.send({
+                  status: 400,
+                  message: "Email is not registered",
+              });
+          }
+      })
+      .catch(err => {
+          res.status(400).send({
+              status: 400,
+              message:
+                  err.message || "Some error occurred while retrieving User."
+          });
+      });
+})
+
 
 
 module.exports = router;
