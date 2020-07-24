@@ -11,6 +11,7 @@ import Uploaded from './components/views/uploaded'
 import UpdateBook from './components/views/updatebook'
 import UploadBook from './components/views/bookupload'
 import Cart from './components/views/Cart'
+import ForgotPassword from './components/views/forgotpassword'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route exact path="/signup" component={SignUp}/>
             <Route exact path="/updatebook/:isbn" component={UpdateBook}/> 
             <Route exact path="/cart" component={Cart}></Route> 
+            <Route exact path="/forgotpassword" component={ForgotPassword}></Route> 
           </div>
           <Route path="/" component={AppWrapper} />
       </div>

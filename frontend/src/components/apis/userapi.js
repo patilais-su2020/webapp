@@ -70,3 +70,14 @@ export const logoutUser = () => {
     })
     .catch(e => {return e.response});
 }
+
+export const resetPassword = (email) => {
+    return axios
+    .post("/api/user/resetpassword",{
+        email: email
+    })
+    .then(res => {
+        return res
+    })
+    .catch(e => {return e.response});
+}
