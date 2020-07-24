@@ -178,7 +178,7 @@ router.post('/resetpassword', (req, res, next) => {
           if (data && data.email) {
               var params = {
                   Message: `${req.body.email}:::${data.id}`,
-                  TopicArn: 'arn:aws:sns:us-east-1:918568617781:password_reset',
+                  TopicArn: `arn:aws:sns:${process.env.AWS_REGION}:918568617781:password_reset`,
               };
               var publishTextPromise = new aws.SNS({ apiVersion: '2010-03-31' }).publish(params).promise();
               publishTextPromise.then(
