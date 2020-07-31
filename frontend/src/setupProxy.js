@@ -1,10 +1,11 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { createProxyMiddleware } = require('https-proxy-middleware');
 module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://localhost:5000',
+      target: 'http://localhost:5000',
       changeOrigin: true,
+      secure: false
     })
   );
 };
