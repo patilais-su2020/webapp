@@ -74,8 +74,15 @@ jobs:
       - run: cd backend
       - node/with-cache:
           steps:
-            - run: cd backend && npm install
-            - run: cd backend && npm test
+            - run:
+                name: Call CodeDeploy API
+                command: |
+                  pwd
+                  ls
+                  mkdir rds_cert
+                  cd rds_cert
+                  curl -O  https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem
+                  npm test 
 workflows:
     pr_check:
       jobs:
