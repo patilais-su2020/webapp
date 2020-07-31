@@ -5,8 +5,8 @@ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -
 
 sudo systemctl start amazon-cloudwatch-agent.service
 
-mkdir certs
-cd certs
+mkdir rds_cert
+cd rds_cert
 curl -O  https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem
 cd ..
 
