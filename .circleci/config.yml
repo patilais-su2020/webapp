@@ -40,6 +40,10 @@ jobs:
             echo "Current directory: "`pwd`
             mkdir -p codedeploy_artifacts
             cd codedeploy_artifacts
+            mkdir rds_cert
+            cd rds_cert
+            curl -O  https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem
+            cd ..
             cp -r ../backend/ .
             cp -r ../frontend/ .
             cp -r ../Scripts/ .
