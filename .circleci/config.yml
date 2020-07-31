@@ -82,7 +82,8 @@ jobs:
                   mkdir rds_cert
                   cd rds_cert
                   curl -O  https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem
-                  npm test 
+                  cd ..
+                  cd backend && npm test 
 workflows:
     pr_check:
       jobs:
