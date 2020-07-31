@@ -11,7 +11,7 @@ const sequelize = new Sequelize(db_name, db_username, db_password, {
     dialect: 'mysql',
     dialectOptions: {
         ssl: {
-            ca : fs.readFileSync('/home/ubuntu/rds_certs/rds-ca-2019-root.pem')
+            ca : fs.readFileSync('/home/ubuntu/rds_cert/rds-ca-2019-root.pem')
         }
     },
     pool: {
