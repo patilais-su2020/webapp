@@ -40,6 +40,10 @@ jobs:
             echo "Current directory: "`pwd`
             mkdir -p codedeploy_artifacts
             cd codedeploy_artifacts
+            mkdir rds_cert
+            cd rds_cert
+            curl -O  https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem
+            cd ..
             cp -r ../backend/ .
             cp -r ../frontend/ .
             cp -r ../Scripts/ .
@@ -70,8 +74,11 @@ jobs:
       - run: cd backend
       - node/with-cache:
           steps:
-            - run: cd backend && npm install
-            - run: cd backend && npm test
+            - run:
+                name: Run Unit Test case
+                command: |
+                  cd backend && npm install
+                  npm test
 workflows:
     pr_check:
       jobs:
