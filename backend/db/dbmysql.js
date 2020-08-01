@@ -4,7 +4,6 @@ const fs = require('fs');
 const db_name = process.env.db_name || 'webappdb'
 const db_username = process.env.db_username || 'admin'
 const db_password = process.env.db_password || 'admin'
-const file_name_rds_cert = fs.readFileSync('/home/ubuntu/rds_cert/rds-ca-2019-root.pem') || fs.readFileSync('/home/circleci/project/rds_cert/rds-ca-2019-root.pem')
 
 const sequelize = new Sequelize(db_name, db_username, db_password, {
     host: process.env.db_hostname || "localhost",
@@ -12,7 +11,7 @@ const sequelize = new Sequelize(db_name, db_username, db_password, {
     dialect: 'mysql',
     dialectOptions: {
         ssl: {
-            ca : file_name_rds_cert
+            ca : fs.readFileSync('/home/ubuntu/rds_cert/rds-ca-2019-root.pem')
         }
     },
     pool: {
